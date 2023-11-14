@@ -1,0 +1,54 @@
+{
+    "ONOTeMe": {
+        "central_atom": "Te_4",
+        "denticity_class": "tri",
+        "sub_denticity_class": "None",
+        "ligand_class": "55",
+        "ligands": [
+            "Cc1cc(C)c([O])c([N]c2cc(C)cc(C)c2[O])c1",
+            "[CH3]"
+        ],
+        "donors": {
+            "OSP2": 2,
+            "NSP2": 1
+        },
+        "smiles": "[H]c1c2c(c(C([H])([H])[H])c([H])c1C([H])([H])[H])O[Te]1(C([H])([H])[H])Oc3c(c([H])c(C([H])([H])[H])c([H])c3C([H])([H])[H])N21",
+        "smiles__F": "Was not generated.",
+        "fingerprint": "e0631b8de3848b192e5c10b4f3c85b97"
+    },
+    "Ph2BF": {
+        "central_atom": "B_3",
+        "denticity_class": "mono",
+        "sub_denticity_class": "None",
+        "ligand_class": "None",
+        "ligands": [
+            "[F]",
+            "[c]1ccccc1",
+            "[c]1ccccc1"
+        ],
+        "donors": {
+            "monoatomic": 1,
+            "CSP2": 2
+        },
+        "smiles": "[H]c1c([H])c([H])c(B(F)c2c([H])c([H])c([H])c([H])c2[H])c([H])c1[H]",
+        "smiles__F": "Was not generated.",
+        "fingerprint": "44b3f8628b3a734c5337c56f63ede8aa"
+    },
+    "catSiCl2": {
+        "central_atom": "Si_4",
+        "denticity_class": "bi",
+        "sub_denticity_class": "single",
+        "ligand_class": "5",
+        "ligands": [
+            "[Cl]",
+            "[Cl]",
+            "[O]c1ccccc1[O]"
+        ],
+        "donors": {
+            "OSP2": 2
+        },
+        "smiles": "[H]c1c([H])c([H])c2c(c1[H])O[Si](Cl)(Cl)O2",
+        "smiles__F": "Was not generated.",
+        "fingerprint": "6f77a1bb0879d0de541c9546a10a063d"
+    }
+}
