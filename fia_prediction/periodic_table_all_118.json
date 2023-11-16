@@ -1,0 +1,828 @@
+{
+ "H": {
+  "Name": "Hydrogen",
+  "Atomic number": 1,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 1,
+  "Period": 1
+ },
+ "He": {
+  "Name": "Helium",
+  "Atomic number": 2,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 1
+ },
+ "Li": {
+  "Name": "Lithium",
+  "Atomic number": 3,
+  "Electronegativity (Pauling)": 0.98,
+  "Group": 1,
+  "Period": 2
+ },
+ "Be": {
+  "Name": "Beryllium",
+  "Atomic number": 4,
+  "Electronegativity (Pauling)": 1.57,
+  "Group": 2,
+  "Period": 2
+ },
+ "B": {
+  "Name": "Boron",
+  "Atomic number": 5,
+  "Electronegativity (Pauling)": 2.04,
+  "Group": 13,
+  "Period": 2
+ },
+ "C": {
+  "Name": "Carbon",
+  "Atomic number": 6,
+  "Electronegativity (Pauling)": 2.55,
+  "Group": 14,
+  "Period": 2
+ },
+ "N": {
+  "Name": "Nitrogen",
+  "Atomic number": 7,
+  "Electronegativity (Pauling)": 3.04,
+  "Group": 15,
+  "Period": 2
+ },
+ "O": {
+  "Name": "Oxygen",
+  "Atomic number": 8,
+  "Electronegativity (Pauling)": 3.44,
+  "Group": 16,
+  "Period": 2
+ },
+ "F": {
+  "Name": "Fluorine",
+  "Atomic number": 9,
+  "Electronegativity (Pauling)": 3.98,
+  "Group": 17,
+  "Period": 2
+ },
+ "Ne": {
+  "Name": "Neon",
+  "Atomic number": 10,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 2
+ },
+ "Na": {
+  "Name": "Sodium",
+  "Atomic number": 11,
+  "Electronegativity (Pauling)": 0.93,
+  "Group": 1,
+  "Period": 3
+ },
+ "Mg": {
+  "Name": "Magnesium",
+  "Atomic number": 12,
+  "Electronegativity (Pauling)": 1.31,
+  "Group": 2,
+  "Period": 3
+ },
+ "Al": {
+  "Name": "Aluminum",
+  "Atomic number": 13,
+  "Electronegativity (Pauling)": 1.61,
+  "Group": 13,
+  "Period": 3
+ },
+ "Si": {
+  "Name": "Silicon",
+  "Atomic number": 14,
+  "Electronegativity (Pauling)": 1.9,
+  "Group": 14,
+  "Period": 3
+ },
+ "P": {
+  "Name": "Phosphorus",
+  "Atomic number": 15,
+  "Electronegativity (Pauling)": 2.19,
+  "Group": 15,
+  "Period": 3
+ },
+ "S": {
+  "Name": "Sulfur",
+  "Atomic number": 16,
+  "Electronegativity (Pauling)": 2.58,
+  "Group": 16,
+  "Period": 3
+ },
+ "Cl": {
+  "Name": "Chlorine",
+  "Atomic number": 17,
+  "Electronegativity (Pauling)": 3.16,
+  "Group": 17,
+  "Period": 3
+ },
+ "Ar": {
+  "Name": "Argon",
+  "Atomic number": 18,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 3
+ },
+ "K": {
+  "Name": "Potassium",
+  "Atomic number": 19,
+  "Electronegativity (Pauling)": 0.82,
+  "Group": 1,
+  "Period": 4
+ },
+ "Ca": {
+  "Name": "Calcium",
+  "Atomic number": 20,
+  "Electronegativity (Pauling)": 1.0,
+  "Group": 2,
+  "Period": 4
+ },
+ "Sc": {
+  "Name": "Scandium",
+  "Atomic number": 21,
+  "Electronegativity (Pauling)": 1.36,
+  "Group": 3,
+  "Period": 4
+ },
+ "Ti": {
+  "Name": "Titanium",
+  "Atomic number": 22,
+  "Electronegativity (Pauling)": 1.54,
+  "Group": 4,
+  "Period": 4
+ },
+ "V": {
+  "Name": "Vanadium",
+  "Atomic number": 23,
+  "Electronegativity (Pauling)": 1.63,
+  "Group": 5,
+  "Period": 4
+ },
+ "Cr": {
+  "Name": "Chromium",
+  "Atomic number": 24,
+  "Electronegativity (Pauling)": 1.66,
+  "Group": 6,
+  "Period": 4
+ },
+ "Mn": {
+  "Name": "Manganese",
+  "Atomic number": 25,
+  "Electronegativity (Pauling)": 1.55,
+  "Group": 7,
+  "Period": 4
+ },
+ "Fe": {
+  "Name": "Iron",
+  "Atomic number": 26,
+  "Electronegativity (Pauling)": 1.83,
+  "Group": 8,
+  "Period": 4
+ },
+ "Co": {
+  "Name": "Cobalt",
+  "Atomic number": 27,
+  "Electronegativity (Pauling)": 1.88,
+  "Group": 9,
+  "Period": 4
+ },
+ "Ni": {
+  "Name": "Nickel",
+  "Atomic number": 28,
+  "Electronegativity (Pauling)": 1.91,
+  "Group": 10,
+  "Period": 4
+ },
+ "Cu": {
+  "Name": "Copper",
+  "Atomic number": 29,
+  "Electronegativity (Pauling)": 1.9,
+  "Group": 11,
+  "Period": 4
+ },
+ "Zn": {
+  "Name": "Zinc",
+  "Atomic number": 30,
+  "Electronegativity (Pauling)": 1.65,
+  "Group": 12,
+  "Period": 4
+ },
+ "Ga": {
+  "Name": "Gallium",
+  "Atomic number": 31,
+  "Electronegativity (Pauling)": 1.81,
+  "Group": 13,
+  "Period": 4
+ },
+ "Ge": {
+  "Name": "Germanium",
+  "Atomic number": 32,
+  "Electronegativity (Pauling)": 2.01,
+  "Group": 14,
+  "Period": 4
+ },
+ "As": {
+  "Name": "Arsenic",
+  "Atomic number": 33,
+  "Electronegativity (Pauling)": 2.18,
+  "Group": 15,
+  "Period": 4
+ },
+ "Se": {
+  "Name": "Selenium",
+  "Atomic number": 34,
+  "Electronegativity (Pauling)": 2.55,
+  "Group": 16,
+  "Period": 4
+ },
+ "Br": {
+  "Name": "Bromine",
+  "Atomic number": 35,
+  "Electronegativity (Pauling)": 2.96,
+  "Group": 17,
+  "Period": 4
+ },
+ "Kr": {
+  "Name": "Krypton",
+  "Atomic number": 36,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 4
+ },
+ "Rb": {
+  "Name": "Rubidium",
+  "Atomic number": 37,
+  "Electronegativity (Pauling)": 0.82,
+  "Group": 1,
+  "Period": 5
+ },
+ "Sr": {
+  "Name": "Strontium",
+  "Atomic number": 38,
+  "Electronegativity (Pauling)": 0.95,
+  "Group": 2,
+  "Period": 5
+ },
+ "Y": {
+  "Name": "Yttrium",
+  "Atomic number": 39,
+  "Electronegativity (Pauling)": 1.22,
+  "Group": 3,
+  "Period": 5
+ },
+ "Zr": {
+  "Name": "Zirconium",
+  "Atomic number": 40,
+  "Electronegativity (Pauling)": 1.33,
+  "Group": 4,
+  "Period": 5
+ },
+ "Nb": {
+  "Name": "Niobium",
+  "Atomic number": 41,
+  "Electronegativity (Pauling)": 1.6,
+  "Group": 5,
+  "Period": 5
+ },
+ "Mo": {
+  "Name": "Molybdenum",
+  "Atomic number": 42,
+  "Electronegativity (Pauling)": 2.16,
+  "Group": 6,
+  "Period": 5
+ },
+ "Tc": {
+  "Name": "Technetium",
+  "Atomic number": 43,
+  "Electronegativity (Pauling)": 2.1,
+  "Group": 7,
+  "Period": 5
+ },
+ "Ru": {
+  "Name": "Ruthenium",
+  "Atomic number": 44,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 8,
+  "Period": 5
+ },
+ "Rh": {
+  "Name": "Rhodium",
+  "Atomic number": 45,
+  "Electronegativity (Pauling)": 2.28,
+  "Group": 9,
+  "Period": 5
+ },
+ "Pd": {
+  "Name": "Palladium",
+  "Atomic number": 46,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 10,
+  "Period": 5
+ },
+ "Ag": {
+  "Name": "Silver",
+  "Atomic number": 47,
+  "Electronegativity (Pauling)": 1.93,
+  "Group": 11,
+  "Period": 5
+ },
+ "Cd": {
+  "Name": "Cadmium",
+  "Atomic number": 48,
+  "Electronegativity (Pauling)": 1.69,
+  "Group": 12,
+  "Period": 5
+ },
+ "In": {
+  "Name": "Indium",
+  "Atomic number": 49,
+  "Electronegativity (Pauling)": 1.78,
+  "Group": 13,
+  "Period": 5
+ },
+ "Sn": {
+  "Name": "Tin",
+  "Atomic number": 50,
+  "Electronegativity (Pauling)": 1.96,
+  "Group": 14,
+  "Period": 5
+ },
+ "Sb": {
+  "Name": "Antimony",
+  "Atomic number": 51,
+  "Electronegativity (Pauling)": 2.05,
+  "Group": 15,
+  "Period": 5
+ },
+ "Te": {
+  "Name": "Tellurium",
+  "Atomic number": 52,
+  "Electronegativity (Pauling)": 2.1,
+  "Group": 16,
+  "Period": 5
+ },
+ "I": {
+  "Name": "Iodine",
+  "Atomic number": 53,
+  "Electronegativity (Pauling)": 2.66,
+  "Group": 17,
+  "Period": 5
+ },
+ "Xe": {
+  "Name": "Xenon",
+  "Atomic number": 54,
+  "Electronegativity (Pauling)": 2.6,
+  "Group": 18,
+  "Period": 5
+ },
+ "Cs": {
+  "Name": "Cesium",
+  "Atomic number": 55,
+  "Electronegativity (Pauling)": 0.79,
+  "Group": 1,
+  "Period": 6
+ },
+ "Ba": {
+  "Name": "Barium",
+  "Atomic number": 56,
+  "Electronegativity (Pauling)": 0.89,
+  "Group": 2,
+  "Period": 6
+ },
+ "La": {
+  "Name": "Lanthanum",
+  "Atomic number": 57,
+  "Electronegativity (Pauling)": 1.1,
+  "Group": 3,
+  "Period": 6
+ },
+ "Ce": {
+  "Name": "Cerium",
+  "Atomic number": 58,
+  "Electronegativity (Pauling)": 1.12,
+  "Group": 0,
+  "Period": 6
+ },
+ "Pr": {
+  "Name": "Praseodymium",
+  "Atomic number": 59,
+  "Electronegativity (Pauling)": 1.13,
+  "Group": 0,
+  "Period": 6
+ },
+ "Nd": {
+  "Name": "Neodymium",
+  "Atomic number": 60,
+  "Electronegativity (Pauling)": 1.14,
+  "Group": 0,
+  "Period": 6
+ },
+ "Pm": {
+  "Name": "Promethium",
+  "Atomic number": 61,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 6
+ },
+ "Sm": {
+  "Name": "Samarium",
+  "Atomic number": 62,
+  "Electronegativity (Pauling)": 1.17,
+  "Group": 0,
+  "Period": 6
+ },
+ "Eu": {
+  "Name": "Europium",
+  "Atomic number": 63,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 6
+ },
+ "Gd": {
+  "Name": "Gadolinium",
+  "Atomic number": 64,
+  "Electronegativity (Pauling)": 1.2,
+  "Group": 0,
+  "Period": 6
+ },
+ "Tb": {
+  "Name": "Terbium",
+  "Atomic number": 65,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 6
+ },
+ "Dy": {
+  "Name": "Dysprosium",
+  "Atomic number": 66,
+  "Electronegativity (Pauling)": 1.22,
+  "Group": 0,
+  "Period": 6
+ },
+ "Ho": {
+  "Name": "Holmium",
+  "Atomic number": 67,
+  "Electronegativity (Pauling)": 1.23,
+  "Group": 0,
+  "Period": 6
+ },
+ "Er": {
+  "Name": "Erbium",
+  "Atomic number": 68,
+  "Electronegativity (Pauling)": 1.24,
+  "Group": 0,
+  "Period": 6
+ },
+ "Tm": {
+  "Name": "Thulium",
+  "Atomic number": 69,
+  "Electronegativity (Pauling)": 1.25,
+  "Group": 0,
+  "Period": 6
+ },
+ "Yb": {
+  "Name": "Ytterbium",
+  "Atomic number": 70,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 6
+ },
+ "Lu": {
+  "Name": "Lutetium",
+  "Atomic number": 71,
+  "Electronegativity (Pauling)": 1.0,
+  "Group": 0,
+  "Period": 6
+ },
+ "Hf": {
+  "Name": "Hafnium",
+  "Atomic number": 72,
+  "Electronegativity (Pauling)": 1.3,
+  "Group": 4,
+  "Period": 6
+ },
+ "Ta": {
+  "Name": "Tantalum",
+  "Atomic number": 73,
+  "Electronegativity (Pauling)": 1.5,
+  "Group": 5,
+  "Period": 6
+ },
+ "W": {
+  "Name": "Tungsten",
+  "Atomic number": 74,
+  "Electronegativity (Pauling)": 1.7,
+  "Group": 6,
+  "Period": 6
+ },
+ "Re": {
+  "Name": "Rhenium",
+  "Atomic number": 75,
+  "Electronegativity (Pauling)": 1.9,
+  "Group": 7,
+  "Period": 6
+ },
+ "Os": {
+  "Name": "Osmium",
+  "Atomic number": 76,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 8,
+  "Period": 6
+ },
+ "Ir": {
+  "Name": "Iridium",
+  "Atomic number": 77,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 9,
+  "Period": 6
+ },
+ "Pt": {
+  "Name": "Platinum",
+  "Atomic number": 78,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 10,
+  "Period": 6
+ },
+ "Au": {
+  "Name": "Gold",
+  "Atomic number": 79,
+  "Electronegativity (Pauling)": 2.4,
+  "Group": 11,
+  "Period": 6
+ },
+ "Hg": {
+  "Name": "Mercury",
+  "Atomic number": 80,
+  "Electronegativity (Pauling)": 1.9,
+  "Group": 12,
+  "Period": 6
+ },
+ "Tl": {
+  "Name": "Thallium",
+  "Atomic number": 81,
+  "Electronegativity (Pauling)": 1.8,
+  "Group": 13,
+  "Period": 6
+ },
+ "Pb": {
+  "Name": "Lead",
+  "Atomic number": 82,
+  "Electronegativity (Pauling)": 1.8,
+  "Group": 14,
+  "Period": 6
+ },
+ "Bi": {
+  "Name": "Bismuth",
+  "Atomic number": 83,
+  "Electronegativity (Pauling)": 1.9,
+  "Group": 15,
+  "Period": 6
+ },
+ "Po": {
+  "Name": "Polonium",
+  "Atomic number": 84,
+  "Electronegativity (Pauling)": 2.0,
+  "Group": 16,
+  "Period": 6
+ },
+ "At": {
+  "Name": "Astatine",
+  "Atomic number": 85,
+  "Electronegativity (Pauling)": 2.2,
+  "Group": 17,
+  "Period": 6
+ },
+ "Rn": {
+  "Name": "Radon",
+  "Atomic number": 86,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 6
+ },
+ "Fr": {
+  "Name": "Francium",
+  "Atomic number": 87,
+  "Electronegativity (Pauling)": 0.7,
+  "Group": 1,
+  "Period": 7
+ },
+ "Ra": {
+  "Name": "Radium",
+  "Atomic number": 88,
+  "Electronegativity (Pauling)": 0.9,
+  "Group": 2,
+  "Period": 7
+ },
+ "Ac": {
+  "Name": "Actinium",
+  "Atomic number": 89,
+  "Electronegativity (Pauling)": 1.1,
+  "Group": 3,
+  "Period": 7
+ },
+ "Th": {
+  "Name": "Thorium",
+  "Atomic number": 90,
+  "Electronegativity (Pauling)": 1.3,
+  "Group": 0,
+  "Period": 7
+ },
+ "Pa": {
+  "Name": "Protactinium",
+  "Atomic number": 91,
+  "Electronegativity (Pauling)": 1.5,
+  "Group": 0,
+  "Period": 7
+ },
+ "U": {
+  "Name": "Uranium",
+  "Atomic number": 92,
+  "Electronegativity (Pauling)": 1.7,
+  "Group": 0,
+  "Period": 7
+ },
+ "Np": {
+  "Name": "Neptunium",
+  "Atomic number": 93,
+  "Electronegativity (Pauling)": 1.3,
+  "Group": 0,
+  "Period": 7
+ },
+ "Pu": {
+  "Name": "Plutonium",
+  "Atomic number": 94,
+  "Electronegativity (Pauling)": 1.3,
+  "Group": 0,
+  "Period": 7
+ },
+ "Am": {
+  "Name": "Americium",
+  "Atomic number": 95,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Cm": {
+  "Name": "Curium",
+  "Atomic number": 96,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Bk": {
+  "Name": "Berkelium",
+  "Atomic number": 97,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Cf": {
+  "Name": "Californium",
+  "Atomic number": 98,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Es": {
+  "Name": "Einsteinium",
+  "Atomic number": 99,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Fm": {
+  "Name": "Fermium",
+  "Atomic number": 100,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Md": {
+  "Name": "Mendelevium",
+  "Atomic number": 101,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "No": {
+  "Name": "Nobelium",
+  "Atomic number": 102,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Lr": {
+  "Name": "Lawrencium",
+  "Atomic number": 103,
+  "Electronegativity (Pauling)": 0,
+  "Group": 0,
+  "Period": 7
+ },
+ "Rf": {
+  "Name": "Rutherfordium",
+  "Atomic number": 104,
+  "Electronegativity (Pauling)": 0,
+  "Group": 4,
+  "Period": 7
+ },
+ "Db": {
+  "Name": "Dubnium",
+  "Atomic number": 105,
+  "Electronegativity (Pauling)": 0,
+  "Group": 5,
+  "Period": 7
+ },
+ "Sg": {
+  "Name": "Seaborgium",
+  "Atomic number": 106,
+  "Electronegativity (Pauling)": 0,
+  "Group": 6,
+  "Period": 7
+ },
+ "Bh": {
+  "Name": "Bohrium",
+  "Atomic number": 107,
+  "Electronegativity (Pauling)": 0,
+  "Group": 7,
+  "Period": 7
+ },
+ "Hs": {
+  "Name": "Hassium",
+  "Atomic number": 108,
+  "Electronegativity (Pauling)": 0,
+  "Group": 8,
+  "Period": 7
+ },
+ "Mt": {
+  "Name": "Meitnerium",
+  "Atomic number": 109,
+  "Electronegativity (Pauling)": 0,
+  "Group": 9,
+  "Period": 7
+ },
+ "Ds": {
+  "Name": "Darmstadtium",
+  "Atomic number": 110,
+  "Electronegativity (Pauling)": 0,
+  "Group": 10,
+  "Period": 7
+ },
+ "Rg": {
+  "Name": "Roentgenium",
+  "Atomic number": 111,
+  "Electronegativity (Pauling)": 0,
+  "Group": 11,
+  "Period": 7
+ },
+ "Cn": {
+  "Name": "Copernicium",
+  "Atomic number": 112,
+  "Electronegativity (Pauling)": 0,
+  "Group": 12,
+  "Period": 7
+ },
+ "Nh": {
+  "Name": "Nihonium",
+  "Atomic number": 113,
+  "Electronegativity (Pauling)": 0,
+  "Group": 13,
+  "Period": 7
+ },
+ "Fl": {
+  "Name": "Flerovium",
+  "Atomic number": 114,
+  "Electronegativity (Pauling)": 0,
+  "Group": 14,
+  "Period": 7
+ },
+ "Mc": {
+  "Name": "Moscovium",
+  "Atomic number": 115,
+  "Electronegativity (Pauling)": 0,
+  "Group": 15,
+  "Period": 7
+ },
+ "Lv": {
+  "Name": "Livermorium",
+  "Atomic number": 116,
+  "Electronegativity (Pauling)": 0,
+  "Group": 16,
+  "Period": 7
+ },
+ "Ts": {
+  "Name": "Tennessine",
+  "Atomic number": 117,
+  "Electronegativity (Pauling)": 0,
+  "Group": 17,
+  "Period": 7
+ },
+ "Og": {
+  "Name": "Oganesson",
+  "Atomic number": 118,
+  "Electronegativity (Pauling)": 0,
+  "Group": 18,
+  "Period": 7
+ }
+}
