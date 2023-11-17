@@ -6,6 +6,7 @@ import json
 import yaml
 from rdkit import Chem
 
+
 class DataSetManager:
     """
     A DataSetManager object can generate a data set of evenly distributed complexes.
@@ -24,7 +25,7 @@ class DataSetManager:
         If the only_LA is set to True, fluoride adducts are generated additionaly (default False).
     ligand_poll_factor: int, optional
         The higher the ligand_poll_factor, the more balanced the donor atom count (default 2000).
-        
+
     Attributes
     ----------
     num: int
@@ -78,6 +79,7 @@ class DataSetManager:
             If the only_LA is set to True, fluoride adducts are generated additionaly (default False).
         ligand_poll_factor: int, optional
             The higher the ligand_poll_factor, the more balanced the donor atom count (default 2000).
+            If you would like to make the routine run faster, decrease this (e.g. to 20).
 
         Returns:
         --------
@@ -85,7 +87,15 @@ class DataSetManager:
             A DataSetManager object.
     """
 
-    def __init__(self, num: int, gen_ligand: callable, gen_structure: callable, only_SMILES=False, only_LA=True, ligand_poll_factor=2000) -> None:
+    def __init__(
+        self,
+        num: int,
+        gen_ligand: callable,
+        gen_structure: callable,
+        only_SMILES=False,
+        only_LA=True,
+        ligand_poll_factor=2000,
+    ) -> None:
         self.num = num  # total amount of complexes to be generated
         self.only_SMILES = only_SMILES
         self.only_LA = only_LA
@@ -93,7 +103,7 @@ class DataSetManager:
         self.gen_ligand = gen_ligand  # function for ligand generation
         self.gen_structure = gen_structure  # function for structure generation
 
-        self._special = True # set structure distribution; False: even distribution over central atoms; True: even distribution over denticity classes
+        self._special = True  # set structure distribution; False: even distribution over central atoms; True: even distribution over denticity classes
 
         # all central atoms and their valencies:
         self.central_atoms = {
@@ -113,9 +123,7 @@ class DataSetManager:
         }
         # categories of complexes (denticity_class, sub_denticity_class, ligand_class); used for num_dict and donor_dict generation:
         self._structure = {
-            "mono": {
-                "None": ["None"]
-            },
+            "mono": {"None": ["None"]},
             "bi": {
                 "single": ["5", "6", "7"],
                 "double": ["55", "56", "57", "66", "67", "77"],
@@ -159,22 +167,40 @@ class DataSetManager:
 
         self.gen_empty_donor_dict()
         self.fingerprint_history = set()
-        
+
         if self.num_dict["sum"] != 0:
-            print(f"[auto_pams_dm] Data set generation was initialized. {self.num_dict['sum']} structures will be generated.")
-        
+            print(
+                f"[auto_pams_dm] Data set generation was initialized. {self.num_dict['sum']} structures will be generated."
+            )
+
         return
 
     @classmethod
-    def load(cls, file_name: str, gen_ligand: callable, gen_structure: callable, num: int = 0, only_SMILES=False, only_LA=True, ligand_poll_factor=2000):
-        '''
+    def load(
+        cls,
+        file_name: str,
+        gen_ligand: callable,
+        gen_structure: callable,
+        num: int = 0,
+        only_SMILES=False,
+        only_LA=True,
+        ligand_poll_factor=2000,
+    ):
+        """
         Load data from json file and return DataSetManager object.
-        '''
+        """
         # load data from json:
         with open(os.path.join("auto_pams_output", file_name), "r") as f:
             data = json.load(f)
         # gen instance of DataSetManager:
-        manager = cls(0, gen_ligand, gen_structure, only_SMILES=only_SMILES, only_LA=only_LA, ligand_poll_factor=ligand_poll_factor)
+        manager = cls(
+            0,
+            gen_ligand,
+            gen_structure,
+            only_SMILES=only_SMILES,
+            only_LA=only_LA,
+            ligand_poll_factor=ligand_poll_factor,
+        )
         # pop fingerprint_history from data:
         fingerprint_history = data.pop("fingerprint_history")
         # update attributes of manager:
@@ -201,15 +227,17 @@ class DataSetManager:
                 ][i["ligand_class"]] -= 1
             DataSetManager.update_num_dict_sum(manager.num_dict)
             manager.num = manager.num_dict["sum"]
-        
-        print(f"[auto_pams_dm] Data set generation was initialized from already existing data set. {manager.num_dict['sum']} additional structures will be generated.")
-        
+
+        print(
+            f"[auto_pams_dm] Data set generation was initialized from already existing data set. {manager.num_dict['sum']} additional structures will be generated."
+        )
+
         return manager
 
     def gen_empty_donor_dict(self):
-        '''
+        """
         Generate an empty donor dict based on ca, dc, sdc and lc structure.
-        '''
+        """
         # ligands have a fixed set of possible donors:
         my_dict = {
             "OSP3": 0,
@@ -262,9 +290,9 @@ class DataSetManager:
         return
 
     def gen_empty_num_dict(self):
-        '''
+        """
         Generate an empty num dict based on ca, dc, sdc and lc structure.
-        '''
+        """
         self.num_dict = {}
         for ca_symbol in self.central_atoms:
             for valence in self.central_atoms[ca_symbol]:
@@ -291,9 +319,9 @@ class DataSetManager:
         return
 
     def gen_num_dict(self, special=False):
-        '''
+        """
         Populate a num dict evenly.
-        '''
+        """
         self.num_dict["sum"] = self.num
         if special:
             # call special distribution:
@@ -306,9 +334,9 @@ class DataSetManager:
         return
 
     def gen_complexes(self):
-        '''
+        """
         Run complex generation.
-        '''
+        """
         # loop num_dict
         # 1. loop central atoms
         for ca in self.num_dict:
@@ -317,9 +345,15 @@ class DataSetManager:
             if self.num_dict[ca]["sum"] == 0:
                 print(f"[auto_pams_dm] No {ca} complexes in queue.")
                 continue
-            print("--------------------------------------------------------------------")
-            print(f"[auto_pams_dm] Doing central atom: {ca} (current count: {len(self.fingerprint_history)})")
-            print("--------------------------------------------------------------------")
+            print(
+                "--------------------------------------------------------------------"
+            )
+            print(
+                f"[auto_pams_dm] Doing central atom: {ca} (current count: {len(self.fingerprint_history)})"
+            )
+            print(
+                "--------------------------------------------------------------------"
+            )
             valence = int(ca.split("_")[1])
             # 2. loop all denticity classes (dc)
             for dc in self.num_dict[ca]:
@@ -328,7 +362,9 @@ class DataSetManager:
                 if self.num_dict[ca][dc]["sum"] == 0:
                     print(f"    [auto_pams_dm] No {dc}-dentate complexes in queue.")
                     continue
-                print(f"    [auto_pams_dm] Doing subclass {dc} (current count: {len(self.fingerprint_history)})")
+                print(
+                    f"    [auto_pams_dm] Doing subclass {dc} (current count: {len(self.fingerprint_history)})"
+                )
                 # 3. loop all sub denticity classes (sdc)
                 for sdc in self.num_dict[ca][dc]:
                     if sdc == "sum":
@@ -356,23 +392,41 @@ class DataSetManager:
                             while True:
                                 # call complex_gen_function:
                                 if dc == "mono":
-                                    ligands, donors = self.gen_mono_complex(ca, dc, sdc, lc, valence)
+                                    ligands, donors = self.gen_mono_complex(
+                                        ca, dc, sdc, lc, valence
+                                    )
                                 elif dc == "bi":
-                                    ligands, donors = self.gen_bi_complex(ca, dc, sdc, lc, valence)
+                                    ligands, donors = self.gen_bi_complex(
+                                        ca, dc, sdc, lc, valence
+                                    )
                                 elif dc == "tri":
-                                    ligands, donors = self.gen_tri_complex(ca, dc, sdc, lc, valence)
+                                    ligands, donors = self.gen_tri_complex(
+                                        ca, dc, sdc, lc, valence
+                                    )
                                 else:
                                     raise ValueError(f"Invalid denticity class: {dc}")
                                 # check if complex is dublicate:
-                                fingerprint = DataSetManager.gen_fingerprint(ca, ligands)
+                                fingerprint = DataSetManager.gen_fingerprint(
+                                    ca, ligands
+                                )
                                 if self.check_dublicate(fingerprint):
-                                    print("        [auto_pams_dm] Dublicate detected. Retry...")
+                                    print(
+                                        "        [auto_pams_dm] Dublicate detected. Retry..."
+                                    )
                                     continue
                                 # check if gen_structure successfull:
-                                smiles, smiles__F = self.gen_structure(ca, ligands, file_name, only_SMILES=self.only_SMILES, only_LA=self.only_LA)
+                                smiles, smiles__F = self.gen_structure(
+                                    ca,
+                                    ligands,
+                                    file_name,
+                                    only_SMILES=self.only_SMILES,
+                                    only_LA=self.only_LA,
+                                )
                                 if smiles:
                                     break
-                                print("        [auto_pams_dm] Structure generation failed. Retry...")
+                                print(
+                                    "        [auto_pams_dm] Structure generation failed. Retry..."
+                                )
                             # add fingerprint to fingerprint_history
                             self.fingerprint_history.add(fingerprint)
                             # add complex to data:
@@ -391,10 +445,12 @@ class DataSetManager:
         DataSetManager.update_donor_dict_sum(self.donor_dict)
         return
 
-    def gen_mono_complex(self, ca: str, dc: str, sdc: str, lc: str, valence: int) -> tuple:
-        '''
+    def gen_mono_complex(
+        self, ca: str, dc: str, sdc: str, lc: str, valence: int
+    ) -> tuple:
+        """
         Sample ligands for a monodentate complex.
-        '''
+        """
         # get copy of current donor distribution
         current_donor_distribution = self.donor_dict[ca][dc][sdc][lc].copy()
         # create list to save new generated ligands:
@@ -403,7 +459,9 @@ class DataSetManager:
         donors = collections.defaultdict(int)
         for _ in range(valence):
             # get excluded_donor and included_donor
-            excluded_donor, included_donor = DataSetManager.get_excluded_included(current_donor_distribution)
+            excluded_donor, included_donor = DataSetManager.get_excluded_included(
+                current_donor_distribution
+            )
             # get new ligand
             new_ligand = self.get_ligand(dc, lc, included_donor, excluded_donor)
             # add new ligand to ligands
@@ -417,9 +475,9 @@ class DataSetManager:
         return ligands, dict(donors)
 
     def gen_bi_complex(self, ca: str, dc: str, sdc: str, lc: str, valence: int) -> list:
-        '''
+        """
         Sample ligands for a bidentate complex.
-        '''
+        """
         valence_count = valence
         # get copy of current donor distribution
         current_donor_distribution = self.donor_dict[ca][dc][sdc][lc].copy()
@@ -430,7 +488,9 @@ class DataSetManager:
         if sdc == "single":
             # add one bi-dentate ligand:
             # 1. get excluded_donor and included_donor
-            excluded_donor, included_donor = DataSetManager.get_excluded_included(current_donor_distribution)
+            excluded_donor, included_donor = DataSetManager.get_excluded_included(
+                current_donor_distribution
+            )
             # 2. get new ligand
             new_ligand = self.get_ligand(dc, lc, included_donor, excluded_donor)
             # 3. add new ligand to ligands
@@ -447,7 +507,9 @@ class DataSetManager:
             for i in lc:
                 # add one bi-dentate ligand:
                 # 1. get excluded_donor and included_donor
-                excluded_donor, included_donor = DataSetManager.get_excluded_included(current_donor_distribution)
+                excluded_donor, included_donor = DataSetManager.get_excluded_included(
+                    current_donor_distribution
+                )
                 # 2. get new ligand
                 new_ligand = self.get_ligand(dc, i, included_donor, excluded_donor)
                 # 3. add new ligand to ligands
@@ -468,10 +530,12 @@ class DataSetManager:
             valence_count -= 1
         return ligands, dict(donors)
 
-    def gen_tri_complex(self, ca: str, dc: str, sdc: str, lc: str, valence: int) -> list:
-        '''
+    def gen_tri_complex(
+        self, ca: str, dc: str, sdc: str, lc: str, valence: int
+    ) -> list:
+        """
         Sample ligands for a tridentate complex.
-        '''
+        """
         valence_count = valence
         # get copy of current donor distribution
         current_donor_distribution = self.donor_dict[ca][dc][sdc][lc].copy()
@@ -481,7 +545,9 @@ class DataSetManager:
         donors = collections.defaultdict(int)
         # add one tri-dentate ligand:
         # 1. get excluded_donor and included_donor
-        excluded_donor, included_donor = DataSetManager.get_excluded_included(current_donor_distribution)
+        excluded_donor, included_donor = DataSetManager.get_excluded_included(
+            current_donor_distribution
+        )
         # 2. get new ligand
         new_ligand = self.get_ligand(dc, lc, included_donor, excluded_donor)
         # 3. add new ligand to ligands
@@ -501,19 +567,23 @@ class DataSetManager:
         return ligands, dict(donors)
 
     def add_to_donor_dict(self, donors: dict, ca: str, dc: str, sdc: str, lc: str):
-        '''
+        """
         Adds donors to donor_dict at given position (position is defined by ca, dc, sdc, lc)
-        '''
+        """
         for key, value in donors.items():
             self.donor_dict[ca][dc][sdc][lc][key] += value
         return
 
-    def get_ligand(self, dc: str, lc: str, included_donor: str, excluded_donor: str) -> str:
-        '''
+    def get_ligand(
+        self, dc: str, lc: str, included_donor: str, excluded_donor: str
+    ) -> str:
+        """
         Trys to return a ligand which includes included_donor and excluds excluded_donor.
-        '''
+        """
         max_num_atoms = {"mono": 20, "bi": 50, "tri": 70}
-        trys = self.ligand_poll_factor # maximum trys: if maximum trys is reached, a ligand is returned even if it does not match the included_donor and excluded_donor constraint
+        trys = (
+            self.ligand_poll_factor
+        )  # maximum trys: if maximum trys is reached, a ligand is returned even if it does not match the included_donor and excluded_donor constraint
         donor_num = {
             "mono": 1,
             "bi": 2,
@@ -521,7 +591,9 @@ class DataSetManager:
         }  # defines the number of donors for each denticity class
         while trys > 0:
             ligand = self.gen_ligand(dc, lc, max_num_atoms[dc])
-            donors = DataSetManager.get_donors(ligand, expected_num=donor_num[dc]) # expected_num is passed additionally, to catch incorrect Chem.MolFromSmiles conversion
+            donors = DataSetManager.get_donors(
+                ligand, expected_num=donor_num[dc]
+            )  # expected_num is passed additionally, to catch incorrect Chem.MolFromSmiles conversion
             # special case: bi-5, bi-6 and tri-55 ligands:
             # - in those types of ligands CSP3, CSP2 and NSP2 donors are common and are likely to appear together in the same ligand
             # - hence for those types of ligands the normal included_donor and excluded_donor constraint is not sufficient and two excluded_donor are taken into account
@@ -545,15 +617,15 @@ class DataSetManager:
         return ligand
 
     def check_dublicate(self, fingerprint: str) -> bool:
-        '''
+        """
         Check if a complex is already in fingerprint_history, based on its fingerprint.
-        '''
+        """
         return fingerprint in self.fingerprint_history
 
     def save(self, name: str):
-        '''
+        """
         Save data to json file, num_dict to yaml and donor_dict to yaml.
-        '''
+        """
         # Save data to json:
         # 1. add fingerprint_history to data
         self.data["fingerprint_history"] = list(self.fingerprint_history)
@@ -578,10 +650,12 @@ class DataSetManager:
 
     @staticmethod
     def update_donor_dict_sum(donor_dict):
-        '''
+        """
         Evaluate sums of donors for every complex category.
-        '''
-        child_donor_dicts = [value for value in donor_dict.values() if "sum" in value.keys()]
+        """
+        child_donor_dicts = [
+            value for value in donor_dict.values() if "sum" in value.keys()
+        ]
         # if a child_donor_dict exists, the lowest layer of donor_dict is not reached; update_donor_dict_sum is called for every child-donor_dict recursively
         if len(child_donor_dicts) > 0:
             for child_donor_dict in child_donor_dicts:
@@ -604,11 +678,13 @@ class DataSetManager:
 
     @staticmethod
     def update_num_dict_sum(num_dict):
-        '''
+        """
         Evaluate sums for every complex category.
-        '''
+        """
         # get child_num_dicts:
-        child_num_dicts = [value for value in num_dict.values() if isinstance(value, dict)]
+        child_num_dicts = [
+            value for value in num_dict.values() if isinstance(value, dict)
+        ]
         # if a child_num_dict exists, the lowest layer of num_dict is not reached; update_num_dict_sum is called for every child-num_dict recursively
         if len(child_num_dicts) > 0:
             for child_num_dict in child_num_dicts:
@@ -616,19 +692,27 @@ class DataSetManager:
             num_dict["sum"] = sum([i["sum"] for i in child_num_dicts])
         # if no child_num_dics exists, the lowest layer of num_dict is reached
         else:
-            num_dict["sum"] = sum([value for key, value in num_dict.items() if key != "sum" and value > 0])
+            num_dict["sum"] = sum(
+                [value for key, value in num_dict.items() if key != "sum" and value > 0]
+            )
         return
 
     @staticmethod
     def distribute_num_dict_special(num_dict):
-        '''
+        """
         Distribute the total amount of complexes over each category recursively.
         Skips distribution into central atom categories.
         Directly distributes into denticity class categories.
-        '''
+        """
         quantity = num_dict["sum"]
         # directly get child of child_num_dict to skip distribution into central atom categories:
-        child_num_dicts = [child_child for child in num_dict.values() if isinstance(child, dict) for child_child in child.values() if isinstance(child_child, dict)]
+        child_num_dicts = [
+            child_child
+            for child in num_dict.values()
+            if isinstance(child, dict)
+            for child_child in child.values()
+            if isinstance(child_child, dict)
+        ]
         categories = len(child_num_dicts)
         distribution = DataSetManager.distribute(quantity, categories)
         for i, child_num_dict in enumerate(child_num_dicts):
@@ -638,13 +722,19 @@ class DataSetManager:
 
     @staticmethod
     def distribute_num_dict(num_dict):
-        '''
+        """
         Distribute the total amount of complexes over each category recursively.
-        '''
+        """
         quantity = num_dict["sum"]
         # get child_num_dicts:
-        child_num_dicts = [value for value in num_dict.values() if isinstance(value, dict)]
-        keys = [key for key, value in num_dict.items() if isinstance(value, int) and key != "sum" ]
+        child_num_dicts = [
+            value for value in num_dict.values() if isinstance(value, dict)
+        ]
+        keys = [
+            key
+            for key, value in num_dict.items()
+            if isinstance(value, int) and key != "sum"
+        ]
         # if a child_num_dict exists, the lowest layer of num_dict is not reached; distribute_num_dict is called for every child-num_dict recursively
         if len(child_num_dicts) > 0:
             categories = len(child_num_dicts)
@@ -662,19 +752,19 @@ class DataSetManager:
 
     @staticmethod
     def distribute(quantity: int, categories: int) -> list:
-        '''
+        """
         Distribute a quantity over a number of categories as evenly as possible.
-        '''
+        """
         base = quantity // categories
         remainder = quantity % categories
         return [base + (1 if i < remainder else 0) for i in range(categories)]
 
     @staticmethod
     def get_donors(ligand: str, expected_num: int = 0) -> dict:
-        '''
+        """
         Count donor atoms of a ligand. The donor atoms are marked by radical electrons.
         The expected amount of donors can be passed additionally to catch incorrect Chem.MolFromSmiles conversion.
-        '''
+        """
         # special case: mono atomic ligands represent a special donor group:
         if ligand in ["[F]", "[Cl]", "[I]", "[H]", "[Br]"]:
             return {"monoatomic": 1}
@@ -695,7 +785,9 @@ class DataSetManager:
             elif atom.GetHybridization() == Chem.rdchem.HybridizationType.SP2:
                 symbol += "SP2"
             else:
-                raise ValueError(f"Expected Chem.rdchem.HybridizationType SP3 or SP2, found {atom.GetHybridization()}. Smiles {ligand}")
+                raise ValueError(
+                    f"Expected Chem.rdchem.HybridizationType SP3 or SP2, found {atom.GetHybridization()}. Smiles {ligand}"
+                )
             donors[i] = symbol
         # count each type of donor
         for i in donors:
@@ -704,15 +796,17 @@ class DataSetManager:
         if expected_num > 0:
             found_num = len(donors)
             if expected_num != found_num:
-                raise ValueError(f"Expected {expected_num} radical atoms, found {found_num} radical atoms. Smiles {ligand}")
+                raise ValueError(
+                    f"Expected {expected_num} radical atoms, found {found_num} radical atoms. Smiles {ligand}"
+                )
         return dict(out)
 
     @staticmethod
     def gen_fingerprint(ca: str, ligands: list) -> str:
-        '''
+        """
         Return the fingerprint of a complex.
         A complex is defined by its central atom and its list of ligands.
-        '''
+        """
         string_list = ligands.copy()
         string_list.append(ca)
         string_list.sort()
@@ -721,12 +815,18 @@ class DataSetManager:
 
     @staticmethod
     def get_excluded_included(donors: dict) -> tuple:
-        '''
+        """
         Get two most common donors (exclude_donor) and least common donor (included_donor) from donors.
-        '''
+        """
         donors = donors.copy()
-        included_donor = list(donors.keys())[list(donors.values()).index(min(list(donors.values())))]
-        excluded_donor_1 = list(donors.keys())[list(donors.values()).index(max(list(donors.values())))]
+        included_donor = list(donors.keys())[
+            list(donors.values()).index(min(list(donors.values())))
+        ]
+        excluded_donor_1 = list(donors.keys())[
+            list(donors.values()).index(max(list(donors.values())))
+        ]
         donors.pop(excluded_donor_1)
-        excluded_donor_2 = list(donors.keys())[list(donors.values()).index(max(list(donors.values())))]
+        excluded_donor_2 = list(donors.keys())[
+            list(donors.values()).index(max(list(donors.values())))
+        ]
         return ((excluded_donor_1, excluded_donor_2), included_donor)
