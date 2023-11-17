@@ -92,6 +92,9 @@ class DataSetManager:
         self.ligand_poll_factor = ligand_poll_factor
         self.gen_ligand = gen_ligand  # function for ligand generation
         self.gen_structure = gen_structure  # function for structure generation
+
+        self._special = True # set structure distribution; False: even distribution over central atoms; True: even distribution over denticity classes
+
         # all central atoms and their valencies:
         self.central_atoms = {
             "B": [3],
@@ -152,7 +155,7 @@ class DataSetManager:
         self.file_count = 1  # file count (every file name includes a unique number)
 
         self.gen_empty_num_dict()
-        self.gen_num_dict(special=True)  # special=False: even distribution over central atoms; special=True: even distribution over denticity classes
+        self.gen_num_dict(special=self._special)
 
         self.gen_empty_donor_dict()
         self.fingerprint_history = set()
@@ -191,7 +194,7 @@ class DataSetManager:
 
         if num > 0:
             manager.num = num
-            manager.gen_num_dict(special=True) # special=False: even distribution over central atoms; special=True: even distribution over denticity classes
+            manager.gen_num_dict(special=manager._special)
             for i in data.values():
                 manager.num_dict[i["central_atom"]][i["denticity_class"]][
                     i["sub_denticity_class"]
