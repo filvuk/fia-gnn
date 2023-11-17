@@ -53,7 +53,7 @@ class fiaGnnPreprocessor:
         self.fia_solv_preprocessor = fia_solv_preprocessor
        
         self.mol = Chem.AddHs(mol)
-        self.smiles = self.cannonical_smiles()
+        self.smiles = self.canonical_smiles()
 
         if ca_idx:
             self.ca_idx = ca_idx
@@ -112,7 +112,7 @@ class fiaGnnPreprocessor:
             _ = self.fia_gas_input
         return self._unknown_bond_token
 
-    def cannonical_smiles(self):
+    def canonical_smiles(self):
         mol = Chem.Mol(self.mol)
         Chem.RemoveStereochemistry(mol)
         smiles = Chem.MolToSmiles(Chem.RemoveHs(self.mol))
