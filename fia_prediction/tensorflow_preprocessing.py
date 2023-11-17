@@ -51,9 +51,9 @@ class fiaGnnPreprocessor:
         self.periodic_table = my_periodic_table
         self.fia_gas_preprocessor = fia_gas_preprocessor
         self.fia_solv_preprocessor = fia_solv_preprocessor
-
-        self.smiles = Chem.MolToSmiles(Chem.RemoveHs(mol)) # remove Hs to obtain canonical smiles
+       
         self.mol = Chem.AddHs(mol)
+        self.smiles = self.cannonical_smiles()
 
         if ca_idx:
             self.ca_idx = ca_idx
@@ -111,6 +111,12 @@ class fiaGnnPreprocessor:
         if self._unknown_bond_token is None:
             _ = self.fia_gas_input
         return self._unknown_bond_token
+
+    def cannonical_smiles(self):
+        mol = Chem.Mol(self.mol)
+        Chem.RemoveStereochemistry(mol)
+        smiles = Chem.MolToSmiles(Chem.RemoveHs(self.mol))
+        return smiles
 
     def get_ca_idx(self):
         ca_smarts = Chem.MolFromSmarts('[#5X3,AlX3,GaX3,InX3,SiX2,SiX4,GeX2,GeX4,SnX2,SnX4,PbX2,PbX4,#15X3,#15X5,AsX3,AsX5,SbX3,SbX5,BiX3,TeX4]')
