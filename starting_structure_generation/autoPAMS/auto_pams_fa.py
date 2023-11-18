@@ -1,7 +1,7 @@
 import os
-import numpy as np
+import numpy as np  # 1.23.5
 
-from scipy.spatial import distance
+from scipy.spatial import distance  # 1.9.1
 from scipy.optimize import minimize
 
 
@@ -15,7 +15,7 @@ else:
 
 class AutoPAMS_FA:
     """
-    A class to geometrically calculate a xyz starting structure of a fluoride adduct 
+    A class to geometrically calculate a xyz starting structure of a fluoride adduct
     from the optimized Lewis acid structure.
 
     Parameters
@@ -30,11 +30,11 @@ class AutoPAMS_FA:
     def __init__(self, la_struc_file, atom_connectivities):
         self.la_struc_file = la_struc_file
         self.atom_connectivities = atom_connectivities
-        
+
         self.name = os.path.basename(self.la_struc_file).split(".")[0]
 
         self.error = None
-        
+
         self._la_num_atoms = None
         self._la_atom_list = None
         self._la_coords = None
@@ -43,7 +43,7 @@ class AutoPAMS_FA:
         self._opt_solution = None
 
         self.fa_atom_connectivities = None
-    
+
     def __call__(self):
         """Run the fluoride adduct generation."""
 
@@ -61,7 +61,7 @@ class AutoPAMS_FA:
             "Sb": 1.98,
             "Si": 1.68,
             "Sn": 1.98,
-            "Te": 2.01
+            "Te": 2.01,
         }
 
         print("---------------------------------------------------------")
@@ -74,7 +74,9 @@ class AutoPAMS_FA:
             dist_constraint = el_f_dist[central_atom]
         else:
             dist_constraint = 1.85
-            print(f"    [auto_pams_fa] Central atom '{central_atom}' was not found in the total scope of the central atoms.\n    Defaulting to 1.85 A as the distance constraint for optimization.")
+            print(
+                f"    [auto_pams_fa] Central atom '{central_atom}' was not found in the total scope of the central atoms.\n    Defaulting to 1.85 A as the distance constraint for optimization."
+            )
 
         # Read the xyz file of the Lewis acid
         self.read_la_struc_file()
@@ -87,18 +89,21 @@ class AutoPAMS_FA:
                 if self.error is None:
                     # Save the fluoride adduct structure as xyz file
                     self.save_fluoride_adduct_structure()
-                    print(f"    [auto_pams_fa] Fluoride adduct was successfully generated and saved.")
+                    print(
+                        "    [auto_pams_fa] Fluoride adduct was successfully generated and saved."
+                    )
                 else:
                     print(f"    [auto_pams_fa] {self.error}")
             else:
-                print(f"    [auto_pams_fa] Structure generation of the fluoride adduct failed.")
-        
+                print(
+                    "    [auto_pams_fa] Structure generation of the fluoride adduct failed."
+                )
+
         else:
             print(f"    [auto_pams_fa] {self.error}")
-        
+
         print()
         return self.atom_connectivities
-
 
     def read_la_struc_file(self):
         """Read the xyz file of the Lewis acid and format the data."""
@@ -106,22 +111,26 @@ class AutoPAMS_FA:
             with open(self.la_struc_file, "r") as f:
                 la = f.readlines()
         else:
-            self.error = f"XYZ file of the Lewis acid was not found at {self.la_struc_file}."
-        
+            self.error = (
+                f"XYZ file of the Lewis acid was not found at {self.la_struc_file}."
+            )
+
         if self.error is None:
             self._la_num_atoms = int(la[0])
             self._la_atom_list = [line.split()[0] for line in la[2:]]
 
             # Get the coordinates of the Lewis acid and shift the 0th atom (central atom) to (0,0,0)
-            la_coords = np.array([line.split()[1:] for line in la[2:]], dtype=np.float32)
+            la_coords = np.array(
+                [line.split()[1:] for line in la[2:]], dtype=np.float32
+            )
             self._shift_vec = la_coords[0]
             self._la_coords = la_coords - self._shift_vec
 
-
     def run_optimization(self, dist_constraint):
         """
-        The distance of the added fluoride atom to its nearest neighbor (excluding the central atom (0th atom) and obviously
-        itself (-1st atom)) is maximized under the constraint of an element-specific central-atom-fluoride distance.
+        The distance of the added fluoride atom to its nearest neighbor
+        (excluding the central atom (0th atom) and obviously itself (-1st atom))
+        is maximized under the constraint of an element-specific central-atom-fluoride distance.
         """
 
         def cost_function(f_coords):
@@ -138,7 +147,6 @@ class AutoPAMS_FA:
             constraints=[{"type": "eq", "fun": constraint_function}],
             options={"maxiter": 999999},
         )
-
 
     def save_fluoride_adduct_structure(self):
         """Save the calculated structure of the fluoride adduct as a .xyz file."""
@@ -163,7 +171,7 @@ class AutoPAMS_FA:
             path = os.path.join("auto_pams_fa_xyz_out", f"{name}__F.xyz")
             with open(path, "w") as f:
                 f.write(final_coords)
-        
+
         # Save atom connectivities
         self.atom_connectivities[f"{self.name}__F"] = self.fa_atom_connectivities
 
@@ -172,15 +180,19 @@ class AutoPAMS_FA:
         f_coords = f_coords.reshape(1, 3)
         self._la_coords = self._la_coords + self._shift_vec
 
-        final_coords = get_final_coords(self._la_num_atoms, self._la_atom_list, self._la_coords, f_coords)
+        final_coords = get_final_coords(
+            self._la_num_atoms, self._la_atom_list, self._la_coords, f_coords
+        )
         write_fa_xyz_file(self.name, final_coords)
-    
 
     def get_fluoride_adduct_connectivities(self):
-        """Get the atom connectivities of the fluoride adduct from those of the Lewis acid (must be provided)."""
+        """
+        Get the atom connectivities of the fluoride adduct from
+        those of the Lewis acid (must be provided).
+        """
         if self.name in self.atom_connectivities:
             la_atom_connectivities = self.atom_connectivities[self.name]
-            
+
             fa_atom_connectivities = np.copy(la_atom_connectivities)
             F_atom_idx = np.max(fa_atom_connectivities) + 1
             fa_atom_connectivities = np.insert(

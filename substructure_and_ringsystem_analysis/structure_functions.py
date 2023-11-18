@@ -1,11 +1,11 @@
-# pylint: disable=invalid-name, global-variable-not-assigned, unused-import, line-too-long, missing-function-docstring, missing-module-docstring, no-member, c-extension-no-member, unspecified-encoding
 import re
 from rdkit import Chem
 
+
 def getRingSystemBonds(mol):
-    '''
+    """
     Returns list of sets, each set containing the bond indices of a ring system.
-    '''
+    """
     ri = mol.GetRingInfo()
     bondRings = list(ri.BondRings())
     if len(bondRings) == 0:
@@ -28,9 +28,9 @@ def getRingSystemBonds(mol):
 
 
 def getRingSystemSmiles(mol, includeTerminalAtoms=True):
-    '''
+    """
     Returns list of smiles of ring systems.
-    '''
+    """
     # some lists for later:
     ringSmiles = []
     envs = getRingSystemBonds(mol)
@@ -58,20 +58,26 @@ def getRingSystemSmiles(mol, includeTerminalAtoms=True):
             neighbors = mol.GetAtomWithIdx(atom_idx).GetNeighbors()
             for neighbor in neighbors:
                 n_idx = neighbor.GetIdx()
-                is_H = neighbor.GetAtomicNum() == 1 # mandatory check
+                is_H = neighbor.GetAtomicNum() == 1  # mandatory check
                 if includeTerminalAtoms:
-                    is_terminal = len(neighbor.GetNeighbors()) + neighbor.GetTotalNumHs() == 1
-                    is_donor = neighbor.GetNumRadicalElectrons() == 1 # optional check, explicitly for this usecase: donor atoms are never terminal
-                    is_terminal = is_terminal and not is_donor # optional check, explicitly for this usecase: donor atoms are never terminal
+                    is_terminal = (
+                        len(neighbor.GetNeighbors()) + neighbor.GetTotalNumHs() == 1
+                    )
+                    is_donor = (
+                        neighbor.GetNumRadicalElectrons() == 1
+                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    is_terminal = (
+                        is_terminal and not is_donor
+                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
                 else:
                     is_terminal = False
-                    
+
                 if n_idx not in atomEnv and not is_H and not is_terminal:
                     wildcardAtoms.add(n_idx)
 
         # generate submol
         atom_map = {}
-        submol = Chem.PathToSubmol(mol, enlargedEnv, atomMap = atom_map)
+        submol = Chem.PathToSubmol(mol, enlargedEnv, atomMap=atom_map)
 
         # set AtomicNum for wildcard atoms
         for atom_idx in wildcardAtoms:
@@ -110,8 +116,10 @@ def getRingSystemSmiles(mol, includeTerminalAtoms=True):
 
 
 ### https://iwatobipen.wordpress.com/2020/08/12/get-and-draw-molecular-fragment-with-user-defined-path-rdkit-memo/
-def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerminalAtoms=True):
-    '''
+def getSubSmilesRadN(
+    mol, radius, skipRings=True, avoidSubsets=True, includeTerminalAtoms=True
+):
+    """
     Returns list of smiles of all substructures of given radius.
     If molecule is smaller than given radius, the molecule smiles is returned.
 
@@ -123,7 +131,7 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
     Substructures of polycylic aromatic ring systems can't be represented
     as rdkit smiles consistently (aromatizity is not represented consistently).
     Keep radius small to avoid substructures that contain closed ring of aromatic ring system.
-    '''
+    """
     # some lists for later:
     subSmiles = []
     envs = []
@@ -149,7 +157,7 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
         # get environment at atomIdx with radius
         atomIdx = atom.GetIdx()
         if radius > 0:
-            env = Chem.FindAtomEnvironmentOfRadiusN(mol,radius,atomIdx)
+            env = Chem.FindAtomEnvironmentOfRadiusN(mol, radius, atomIdx)
             # check if env of radius exists at atomIdx:
             if not set(env):
                 continue
@@ -159,7 +167,7 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
                 atomEnv.add(mol.GetBondWithIdx(bond_idx).GetEndAtomIdx())
         else:
             env = []
-            atomEnv = set((atomIdx, ))
+            atomEnv = set((atomIdx,))
 
         # enlarge the environment by one further bond
         enlargedEnv = set()
@@ -180,12 +188,18 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
                 n_idx = neighbor.GetIdx()
                 is_H = neighbor.GetAtomicNum() == 1
                 if includeTerminalAtoms:
-                    is_terminal = len(neighbor.GetNeighbors()) + neighbor.GetTotalNumHs() == 1
-                    is_donor = neighbor.GetNumRadicalElectrons() == 1 # optional check, explicitly for this usecase: donor atoms are never terminal
-                    is_terminal = is_terminal and not is_donor # optional check, explicitly for this usecase: donor atoms are never terminal
+                    is_terminal = (
+                        len(neighbor.GetNeighbors()) + neighbor.GetTotalNumHs() == 1
+                    )
+                    is_donor = (
+                        neighbor.GetNumRadicalElectrons() == 1
+                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    is_terminal = (
+                        is_terminal and not is_donor
+                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
                 else:
                     is_terminal = False
-                    
+
                 if n_idx not in atomEnv and not is_H and not is_terminal:
                     wildcardAtoms.add(n_idx)
 
@@ -224,7 +238,7 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
     for enlargedEnv, wildcardAtoms in zip(envs, wildcards):
         # generate submol
         atom_map = {}
-        submol = Chem.PathToSubmol(mol, enlargedEnv, atomMap = atom_map)
+        submol = Chem.PathToSubmol(mol, enlargedEnv, atomMap=atom_map)
 
         # set AtomicNum or AtomMapNum for wildcard atoms
         for atom_idx in wildcardAtoms:
@@ -246,7 +260,9 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
         for mol_atom_idx, submol_atom_idx in atom_map.items():
             mol_atom = mol.GetAtomWithIdx(mol_atom_idx)
             submol_atom = submol.GetAtomWithIdx(submol_atom_idx)
-            if not mol_atom_idx in wildcardAtoms:# or submol_atom.GetAtomMapNum() == 1000:
+            if (
+                not mol_atom_idx in wildcardAtoms
+            ):  # or submol_atom.GetAtomMapNum() == 1000:
                 submol_atom.SetNumExplicitHs(mol_atom.GetTotalNumHs())
             else:
                 submol_atom.SetNumExplicitHs(0)
@@ -262,11 +278,11 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
         smarts = Chem.MolToSmarts(submol)
         smiles = Chem.MolToSmiles(Chem.MolFromSmiles(smarts))
         ### at this point smarts was converted to smiles, so the remaining wildcard atoms can be set:
-        smiles = re.sub('(\[)([a-zA-Z]{1,2})(H|H[2-9])?(\:1000\])', '*', smiles)
+        smiles = re.sub("(\[)([a-zA-Z]{1,2})(H|H[2-9])?(\:1000\])", "*", smiles)
         ### Fun fact: very view non-canonical smiles still exist, so let's do another round of "read in smiles" and "generate smiles":
         smiles = Chem.MolToSmiles(Chem.MolFromSmiles(smiles))
         subSmiles.append(smiles)
-    
+
     # check if mol object consist of only ring atoms, if skipRings flag is set to True:
     if skipRings:
         mol_has_only_ring_atoms = mol.GetNumAtoms() == ring_atom_count
@@ -275,6 +291,8 @@ def getSubSmilesRadN(mol, radius, skipRings=True, avoidSubsets=True, includeTerm
 
     # check if at least one env of radius exists in mol object, else smiles of mol object is returned
     if not subSmiles and not mol_has_only_ring_atoms:
-        return [Chem.MolToSmiles(mol), ]
-    
+        return [
+            Chem.MolToSmiles(mol),
+        ]
+
     return subSmiles

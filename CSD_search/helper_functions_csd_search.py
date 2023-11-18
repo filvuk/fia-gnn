@@ -1,6 +1,6 @@
 import random
-import pandas as pd
-from rdkit import Chem, DataStructs
+import pandas as pd  # 1.5.0
+from rdkit import Chem, DataStructs  # 2023.03.3
 from rdkit.Chem import AllChem
 
 
@@ -91,7 +91,8 @@ def get_picks(subset, n_picks):
 
     def get_tanimoto_similarities(smiles, all_smiles):
         """
-        Calculate the Tanimoto similarities of a molecule (provided as SMILES string) with all other molecules
+        Calculate the Tanimoto similarities of a molecule (provided as SMILES
+        string) with all other molecules
         """
         similarities = []
 
