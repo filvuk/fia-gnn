@@ -147,7 +147,7 @@ class fiaGnnPreprocessor:
 
     def get_ca_idx(self):
         ca_smarts = Chem.MolFromSmarts(
-            "[#5X3,AlX3,GaX3,InX3,SiX2,SiX4,GeX2,GeX4,SnX2,SnX4,PbX2,PbX4,#15X3,#15X5,AsX3,AsX5,SbX3,SbX5,BiX3,TeX4]"
+            "[#5X3,AlX3,GaX3,InX3,SiX2,SiX4,GeX2,GeX4,SnX2,SnX4,PbX2,PbX4,#15X3,#15X5,AsX3,AsX5,SbX3,SbX5,BiX3,BiX5,TeX4]"
         )
         ca_idx = self.mol.GetSubstructMatches(ca_smarts)
         if len(ca_idx) == 0:
