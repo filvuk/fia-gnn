@@ -63,7 +63,37 @@ def get_padding_values(nfp_preprocessor):
 
 class fiaGnnPreprocessor:
     """
-    A class to do the preprocessing for the FIA-GNN model.
+    A class for preprocessing data for the FIA-GNN model.
+
+    Parameters
+    ----------
+    mol: rdkit.Chem.rdchem.Mol
+        Mol object of Lewis acid.
+    fia_gas_preprocessor: nfp.preprocessing.mol_preprocessor.MolPreprocessor, optional
+        NFP MolPreprocessor of fia_gas model.
+        Does not have to be specified, if only input for fia_solv model is needed.
+    fia_solv_preprocessor: nfp.preprocessing.mol_preprocessor.MolPreprocessor, optional
+        NFP MolPreprocessor of fia_solv model.
+        Does not have to be specified, if only input for fia_gas model is needed.
+    ca_idx: int, optional
+        Index of the central atom of the Lewis acid (refers to index within Mol object).
+        If not specified, ca_idx is determined automatically.
+        If ca_idx can't be specified, error is raised.
+        
+    Attributes
+    ----------
+    ca_symbol: str
+        Symbol of central atom.
+    smiles: str
+        Canonical smiles of Lewis acid.
+    fia_gas_input: dict
+        Input for fia_gas model.
+    fia_solv_input: dict
+        Input for fia_solv model.
+    unknown_atom_token: bool
+        True, if unknown atom-token in model input.
+    unknown_bond_token: bool
+        True, if unknown bond-token in model input.
     """
 
     def __init__(
