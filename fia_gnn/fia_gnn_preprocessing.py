@@ -63,7 +63,37 @@ def get_padding_values(nfp_preprocessor):
 
 class fiaGnnPreprocessor:
     """
-    A class to do the preprocessing for the FIA-GNN model.
+    A class for preprocessing data for the FIA-GNN model.
+
+    Parameters
+    ----------
+    mol: rdkit.Chem.rdchem.Mol
+        Mol object of Lewis acid.
+    fia_gas_preprocessor: nfp.preprocessing.mol_preprocessor.MolPreprocessor, optional
+        NFP MolPreprocessor of fia_gas model.
+        Does not have to be specified, if only input for fia_solv model is needed.
+    fia_solv_preprocessor: nfp.preprocessing.mol_preprocessor.MolPreprocessor, optional
+        NFP MolPreprocessor of fia_solv model.
+        Does not have to be specified, if only input for fia_gas model is needed.
+    ca_idx: int, optional
+        Index of the central atom of the Lewis acid (refers to index within Mol object).
+        If not specified, ca_idx is determined automatically.
+        If ca_idx can't be specified, error is raised.
+        
+    Attributes
+    ----------
+    ca_symbol: str
+        Symbol of central atom.
+    smiles: str
+        Canonical smiles of Lewis acid.
+    fia_gas_input: dict
+        Input for fia_gas model.
+    fia_solv_input: dict
+        Input for fia_solv model.
+    unknown_atom_token: bool
+        True, if unknown atom-token in model input.
+    unknown_bond_token: bool
+        True, if unknown bond-token in model input.
     """
 
     def __init__(
@@ -147,7 +177,7 @@ class fiaGnnPreprocessor:
 
     def get_ca_idx(self):
         ca_smarts = Chem.MolFromSmarts(
-            "[#5X3,AlX3,GaX3,InX3,SiX2,SiX4,GeX2,GeX4,SnX2,SnX4,PbX2,PbX4,#15X3,#15X5,AsX3,AsX5,SbX3,SbX5,BiX3,TeX4]"
+            "[#5X3,AlX3,GaX3,InX3,SiX2,SiX4,GeX2,GeX4,SnX2,SnX4,PbX2,PbX4,#15X3,#15X5,AsX3,AsX5,SbX3,SbX5,BiX3,BiX5,TeX4]"
         )
         ca_idx = self.mol.GetSubstructMatches(ca_smarts)
         if len(ca_idx) == 0:
