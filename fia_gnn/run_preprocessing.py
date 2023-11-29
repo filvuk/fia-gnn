@@ -58,11 +58,11 @@ def get_input_dict(df, prop, fia_gas_preprocessor, fia_solv_preprocessor, train=
 
 
 def run_preprocessing(
-    data_file_path=r"F:\FIA_GENERATION\for_publication\FINAL\FIA49k.csv.gz",
+    data_file_path,
 ):
     """
     A function to run the preprocessing prior to model training.
-    The data file must contain a column called "la_smiles" (SMILES string of the Lewis acid)
+    The provided data file must contain a column called "la_smiles" (SMILES string of the Lewis acid)
     as well as columns called fia_gas-DSDBLYP and fia_solv_DSDBLYP with the FIA values
     to be learned.
     """
@@ -146,5 +146,11 @@ if __name__ == "__main__":
     print("# FIA-GNN Preprocessing #")
     print("#########################")
     print()
-    run_preprocessing()
+
+    path = os.path.split(os.getcwd())[0]
+    path = os.path.join(path, "data", "FIA49k.csv.gz")
+
+    run_preprocessing(data_file_path=path)
+
     print("Preprocessing finished.")
+    print()

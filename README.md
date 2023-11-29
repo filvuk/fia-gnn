@@ -2,7 +2,7 @@
 
 This repository corresponds to the publication  
 L.M. Sigmund, S. Sowndarya S. V., A. Albers, P. Erdmann, R. S. Paton, L. Greb, _Journal_ **2024**, _issue_, pages [DOI](https://github.com/patonlab/BDE-db2).  
-The FIA49k data set and all other data files can be downloaded from [figshare link](https://github.com/patonlab/BDE-db2) and should be placed in the "data" folder of this repository to run the provided Jupyter notebooks.  
+The FIA49k data set and all other data files can be downloaded from [figshare link](https://github.com/patonlab/BDE-db2) and should be placed in the "data" folder of this repository to run the provided Jupyter notebooks and Python scripts.  
 
 ## Use FIA-GNN via the Web App
 
