@@ -1,6 +1,7 @@
 import os
 import time
 import pandas as pd
+import numpy as np
 import tensorflow as tf
 import tensorflow_addons as tfa
 
@@ -56,7 +57,9 @@ preprocessor = get_nfp_preprocessor(path_to_preprocessor)
 
 # Define output signatures and padding values
 output_signature = get_output_signature(preprocessor)
+output_signature['output'] = tf.TensorSpec(shape=(None,), dtype=tf.float32)
 padding_values = get_padding_values(preprocessor)
+padding_values['output'] = tf.constant(np.nan, dtype=tf.float32)
 
 # Load the preprocessed data
 data = pd.read_pickle(

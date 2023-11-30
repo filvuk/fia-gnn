@@ -52,7 +52,6 @@ def get_output_signature(nfp_preprocessor):
         **nfp_preprocessor.output_signature,
         **{"dist_to_central_atom": tf.TensorSpec(shape=(None,), dtype=tf.int64)},
         **{"global_features": tf.TensorSpec(shape=(None,), dtype=tf.float32)},
-        **{"output": tf.TensorSpec(shape=(None,), dtype=tf.float32)},
     }
     return output_signature
 
@@ -63,7 +62,6 @@ def get_padding_values(nfp_preprocessor):
         **nfp_preprocessor.padding_values,
         **{"dist_to_central_atom": tf.constant(0, dtype=tf.int64)},
         **{"global_features": tf.constant(0, dtype=tf.float32)},
-        **{"output": tf.constant(np.nan, dtype=tf.float32)},
     }
     return padding_values
 
