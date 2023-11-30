@@ -223,11 +223,16 @@ class FiaGnnPreprocessor:
         """
         Get the distances of the individual atoms to the central atom.
         Within the training set of FIA-GNN, a maximum distance of 18 bonds
-        is contained. Therefore, it is here set to a maximum value of 18.
+        is contained. Therefore, it is here set to a maximum value of 18 if
+        the preprocessor is not trained.
         """
+        if self.train is True:
+            return [
+                dist for dist in Chem.rdmolops.GetDistanceMatrix(self.mol)[self.ca_idx]
+            ]
         return [
-            i if i < 18 else 18.0
-            for i in Chem.rdmolops.GetDistanceMatrix(self.mol)[self.ca_idx]
+            dist if dist < 18 else 18.0
+            for dist in Chem.rdmolops.GetDistanceMatrix(self.mol)[self.ca_idx]
         ]
 
     def get_lig_count(self):

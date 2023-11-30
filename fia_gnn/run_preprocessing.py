@@ -147,6 +147,7 @@ if __name__ == "__main__":
     print("#########################")
     print()
 
+    # Modify this path accordingly.
     path = os.path.split(os.getcwd())[0]
     path = os.path.join(path, "data", "FIA49k.csv.gz")
 
