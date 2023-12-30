@@ -74,7 +74,7 @@ class ManualPAMS:
         set_identifier="",
         custom_name=None,
         embed_3D=True,
-        ignor_mini_ligands=False,
+        ignore_mini_ligands=False,
     ):
         """
         Call ManualPAMS. It returns the generated name (identifier) of the molecule,
@@ -93,7 +93,7 @@ class ManualPAMS:
             parameter.
         embed_3D: bool
             Whether or not the 3-dimensional xyz structure of the molecule should be calculated.
-        ignor_mini_ligands: bool
+        ignore_mini_ligands: bool
             Whether or not the so-called mini ligands should be ignored when analyzing the atoms
             directly binding to the central atom.
         """
@@ -118,7 +118,7 @@ class ManualPAMS:
                 self.get_central_atom_valency()
                 self.get_ligand_class()
                 self.get_ligand_info()
-                self.get_donor_atoms_types(ignor_mini_ligands)
+                self.get_donor_atoms_types(ignore_mini_ligands)
                 self.gen_fingerprint()
                 self.get_name(mol_idx_number, set_identifier, custom_name)
                 self.get_json_data()
@@ -129,7 +129,7 @@ class ManualPAMS:
                     if self.xyz_coords is not None:
                         self.save_xyz_coords()
                         self.get_atom_connectivities()
-        
+
         print(f"    [manual_pams] Error: {self.error}")
         print()
         return self.name, self.json_data, self.atom_connectivities
@@ -182,7 +182,9 @@ class ManualPAMS:
                             self.get_atom_connectivities()
                             self.xyz_coords = Chem.rdmolfiles.MolToXYZBlock(self.mol)
                             self.save_xyz_coords()
-                            print(f"    [manual_pams] UFF optimization was successful and structure was saved.")
+                            print(
+                                f"    [manual_pams] UFF optimization was successful and structure was saved."
+                            )
                         else:
                             self.error = "UFF optimization failed."
                 else:
@@ -193,7 +195,7 @@ class ManualPAMS:
 
         else:
             self.error = "Provided mol file cannot be converted to RDKit mol object."
-        
+
         print(f"    [manual_pams] Error: {self.error}")
         return self.name, self.json_data, self.atom_connectivities
 
@@ -395,7 +397,7 @@ class ManualPAMS:
             else:
                 self.error = "Sub-denticity class could not be determined correctly."
 
-    def get_donor_atoms_types(self, ignor_mini_ligands):
+    def get_donor_atoms_types(self, ignore_mini_ligands):
         """
         Get the hybridization of the donor atoms (atoms binding to the central atom).
         This is done after getting the denticity and sub-denticity class as mini-ligands
@@ -421,7 +423,7 @@ class ManualPAMS:
 
             if (
                 self.denticity_class != "mono"
-                and ignor_mini_ligands is True
+                and ignore_mini_ligands is True
                 and smiles in mini_ligands
             ):
                 continue
@@ -431,7 +433,7 @@ class ManualPAMS:
                     atom_type = str(atom.GetSymbol()) + str(atom.GetHybridization())
                     if (
                         atom.GetSymbol() in ["H", "F", "Cl", "Br", "I"]
-                        and ignor_mini_ligands is True
+                        and ignore_mini_ligands is True
                     ):
                         atom_type = "monoatomic"
 
@@ -478,7 +480,6 @@ class ManualPAMS:
 
     def get_atom_connectivities(self):
         """Get the atom connectivities of the Lewis acid and the fluoride adduct."""
-        # Get atom connectivities of the molecule (Lewis acid)
         atom_connectivities_lewis_acid = np.empty(shape=(0, 2), dtype=np.int32)
         for bonds in self.mol.GetBonds():
             bond = np.array(
@@ -499,6 +500,4 @@ class ManualPAMS:
         ]
 
         # Store data in dictionary
-        self.atom_connectivities = {
-            self.name: atom_connectivities_lewis_acid
-        }
+        self.atom_connectivities = {self.name: atom_connectivities_lewis_acid}

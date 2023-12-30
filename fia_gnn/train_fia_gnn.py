@@ -61,7 +61,7 @@ output_signature["output"] = tf.TensorSpec(shape=(None,), dtype=tf.float32)
 padding_values = get_padding_values(preprocessor)
 padding_values["output"] = tf.constant(np.nan, dtype=tf.float32)
 
-# Load the preprocessed data
+# Load the preprocessed data. This file can be generated with the run_preprocessing.py script.
 data = pd.read_pickle(
     Path(
         f"preprocessed_data_{PROPERTY_NAME}/{PREPROCESSOR_NAME}_model_inputs.pkl",

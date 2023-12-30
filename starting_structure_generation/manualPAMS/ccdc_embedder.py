@@ -2,7 +2,7 @@ import os
 from subprocess import run, TimeoutExpired
 
 
-# Creat output directories
+# Create output directories
 if not os.path.isdir("manual_pams_out"):
     os.mkdir("manual_pams_out")
     os.mkdir(os.path.join("manual_pams_out", "mol_out"))

@@ -148,8 +148,7 @@ if __name__ == "__main__":
     print()
 
     # Modify this path accordingly.
-    path = os.path.split(os.getcwd())[0]
-    path = os.path.join(path, "data", "FIA49k.csv.gz")
+    path = os.path.join(os.path.split(os.getcwd())[0], "data", "FIA49k.csv.gz")
 
     run_preprocessing(data_file_path=path)
 

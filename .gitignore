@@ -1,4 +1,12 @@
 .vscode/
 **/*.ipynb_checkpoints/
 **/__pycache__/
-data/Untitled-1.txt
+
+# Files available from figshare
+data/FIA49k.csv.gz
+data/FIA49k.zip
+data/FIA49k_2d_descriptors.csv.gz
+data/FIA49k_2d_descriptors_selection.json
+data/FIA49k_fia_gnn_embeddings.csv.gz
+data/FIA49k_predictions.csv.gz
+data/readme.md

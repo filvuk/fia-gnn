@@ -5,7 +5,7 @@ from rdkit.Chem import AllChem
 import numpy as np  # 1.23.5
 
 # iter_factor influences the max attempts of the RDKit embedding function:
-iter_factor = 2 #RDKit default is 10
+iter_factor = 2  # RDKit default is 10
 
 # Gen main output directory
 if not os.path.isdir("auto_pams_output"):
@@ -32,7 +32,7 @@ else:
 
 class Complex:
     """
-    A complex object can assemble and embed a complexe from a central atom and ligands.
+    A complex object can assemble and embed a complex (molecule) from a central atom and ligands.
 
     Parameters
     ----------
@@ -43,16 +43,21 @@ class Complex:
     name: str
         The unique name of the complex.
     """
+
     def __init__(self, ca: str, ligands: list, name: str):
         self.name = name
         self.ligands_smiles = ligands  # list of smiles of ligands
-        self.ligands = [Chem.MolFromSmiles(smiles) for smiles in ligands] # list of mol objects of ligands
+        self.ligands = [
+            Chem.MolFromSmiles(smiles) for smiles in ligands
+        ]  # list of mol objects of ligands
         self.ca_symbol = ca
-        self.ca = Chem.MolFromSmiles("["+ca.split("_")[0]+"]") # mol object of central atom
+        self.ca = Chem.MolFromSmiles(
+            "[" + ca.split("_")[0] + "]"
+        )  # mol object of central atom
         self.valence = int(ca.split("_")[1])
 
         # find indieces of donor atoms and additional indieces in case of imine donors:
-        self.donor_atoms = []   # list of list of indieces of donor atoms
+        self.donor_atoms = []  # list of list of indieces of donor atoms
         self.imine_N = []  # list of list of indieces of imine N atoms
         self.imine_bonds = []  # list of list of indieces of imine bonds
         self.imine_C = []  # list of list of indieces of imine C atoms
@@ -61,7 +66,9 @@ class Complex:
         # calculate denticity of ligands and check if denticity of ligands matches valence of central atom:
         self.denticity = [len(x) for x in self.donor_atoms]
         if self.valence != sum(self.denticity):
-            raise ValueError(f"Valence and denticity do not match. Valence {self.valence}. Smiles {self.ligands_smiles}")
+            raise ValueError(
+                f"Valence and denticity do not match. Valence {self.valence}. Smiles {self.ligands_smiles}"
+            )
 
         # find indieces of second stereo atom of imine donors:
         self.second_stereo_atom = []
@@ -74,16 +81,16 @@ class Complex:
         return
 
     def find_donors(self):
-        '''
+        """
         Determine indieces of donor atoms for every ligand.
-        If the donor atom is an imine N atom, additional indieces (inciece of imine N atom, imine C atom and imine bond) are determined.
-        '''
+        If the donor atom is an imine N atom, additional indieces (imine N atom, imine C atom and imine bond) are determined.
+        """
         for ligand in self.ligands:
             radicals = []
             imine_N = []
             imine_C = []
             imine_bonds = []
-            #loop atoms and find radicals (= donor atoms), imine_N atoms, imine_C atoms and imine bonds:
+            # loop atoms and find radicals (= donor atoms), imine_N atoms, imine_C atoms and imine bonds:
             for atom in ligand.GetAtoms():
                 if atom.GetNumRadicalElectrons() == 1:
                     # append radical atom index:
@@ -102,7 +109,14 @@ class Complex:
                                     imine_C.append(bond.GetBeginAtomIdx())
                                 # Special case: "C=[N]"
                                 # This ligand has no stereoinformation / no atoms beyond C. Hence this ligand would crash the find_second_stereo_atom function and is therefore not considered:
-                                if len(ligand.GetAtomWithIdx(imine_C[-1]).GetNeighbors()) == 1:
+                                if (
+                                    len(
+                                        ligand.GetAtomWithIdx(
+                                            imine_C[-1]
+                                        ).GetNeighbors()
+                                    )
+                                    == 1
+                                ):
                                     imine_C.pop()
                                     imine_N.pop()
                                     imine_bonds.pop()
@@ -113,37 +127,55 @@ class Complex:
             self.imine_bonds.append(imine_bonds)
 
     def find_second_stereo_atom(self):
-        '''
+        """
         Find indieces of second stereo atom.
-        The secend stereo atom is the atom, which is bound to an imine C atom of an imine donor group
+        The second stereo atom is the atom, which is bound to an imine C atom of an imine donor group
         and is on the shortest ring together with the central atom.
-        '''
+        """
         for i, ligand in enumerate(self.ligands):
             second_stereo_atom = []
-            # for mono dentate ligands any atom can be choosen as second stereo atom, since no ring with the central atom is formed:
-            if self.denticity[i] == 1 and len(self.imine_N[i]) > 0: # if ligand is mono dentate and has one donor imine
+            # for mono dentate ligands any atom can be chosen as second stereo atom, since no ring with the central atom is formed:
+            if (
+                self.denticity[i] == 1 and len(self.imine_N[i]) > 0
+            ):  # if ligand is mono dentate and has one donor imine
                 imine_C = ligand.GetAtomWithIdx(self.imine_C[i][0])
-                neighbors_Idx = [x.GetIdx() for x in imine_C.GetNeighbors() if x.GetIdx() != self.imine_N[i][0]] # all neihbors of imine_C except imine_N
-                second_stereo_atom.append(neighbors_Idx[0]) # use first neighbor as second stereo atom
+                neighbors_idx = [
+                    x.GetIdx()
+                    for x in imine_C.GetNeighbors()
+                    if x.GetIdx() != self.imine_N[i][0]
+                ]  # all neighbors of imine_C except imine_N
+                second_stereo_atom.append(
+                    neighbors_idx[0]
+                )  # use first neighbor as second stereo atom
             # for bi and tri dentate ligands the second stereo atom has to be the atom on the shortest ring of the complex :
-            if self.denticity[i] > 1 and len(self.imine_N[i]) > 0: # checks if ligand is bi or tri dentate and has at least one donor imine group
+            if (
+                self.denticity[i] > 1 and len(self.imine_N[i]) > 0
+            ):  # checks if ligand is bi or tri dentate and has at least one donor imine group
                 for j, imine_C_idx in enumerate(self.imine_C[i]):
                     imine_C = ligand.GetAtomWithIdx(imine_C_idx)
-                    neighbors_Idx = [x.GetIdx() for x in imine_C.GetNeighbors() if x.GetIdx() != self.imine_N[i][j]]
-                    loops = [Chem.GetShortestPath(ligand, imine_C_idx, x) for x in self.donor_atoms[i] if x != self.imine_N[i][j]]
+                    neighbors_idx = [
+                        x.GetIdx()
+                        for x in imine_C.GetNeighbors()
+                        if x.GetIdx() != self.imine_N[i][j]
+                    ]
+                    loops = [
+                        Chem.GetShortestPath(ligand, imine_C_idx, x)
+                        for x in self.donor_atoms[i]
+                        if x != self.imine_N[i][j]
+                    ]
                     loops_length = [len(x) for x in loops]
                     shortest_loop = loops[loops_length.index(min(loops_length))]
-                    if neighbors_Idx[0] in shortest_loop:
-                        second_stereo_atom.append(neighbors_Idx[0])
+                    if neighbors_idx[0] in shortest_loop:
+                        second_stereo_atom.append(neighbors_idx[0])
                     else:
-                        second_stereo_atom.append(neighbors_Idx[1])
+                        second_stereo_atom.append(neighbors_idx[1])
             self.second_stereo_atom.append(second_stereo_atom)
         return
 
     def gen_final_mol(self):
-        '''
+        """
         Assemble Lewis acid from ligands and central atom.
-        '''
+        """
         final_mol = Chem.Mol(self.ca)
         for i, ligand in enumerate(self.ligands):
             # attach ligand to complex:
@@ -151,16 +183,22 @@ class Complex:
             final_mol = Chem.CombineMols(final_mol, ligand)
             final_mol = Chem.RWMol(final_mol)
             for j in self.donor_atoms[i]:
-                final_mol.AddBond(0, j+init_atom_count, order=Chem.rdchem.BondType.SINGLE)
+                final_mol.AddBond(
+                    0, j + init_atom_count, order=Chem.rdchem.BondType.SINGLE
+                )
             # fix imine stereo:
-            for N, C, scnd_ster_at in zip(self.imine_N[i], self.imine_C[i], self.second_stereo_atom[i]):
-                bond = final_mol.GetBondBetweenAtoms(N+init_atom_count, C+init_atom_count)
+            for N, C, scnd_ster_at in zip(
+                self.imine_N[i], self.imine_C[i], self.second_stereo_atom[i]
+            ):
+                bond = final_mol.GetBondBetweenAtoms(
+                    N + init_atom_count, C + init_atom_count
+                )
                 bond.SetStereo(Chem.rdchem.BondStereo.STEREOZ)
                 if 0 in [x.GetIdx() for x in bond.GetBeginAtom().GetNeighbors()]:
-                    bond.SetStereoAtoms(0, scnd_ster_at+init_atom_count)
+                    bond.SetStereoAtoms(0, scnd_ster_at + init_atom_count)
                 else:
-                    bond.SetStereoAtoms(scnd_ster_at+init_atom_count, 0)
-        #remove radicals:
+                    bond.SetStereoAtoms(scnd_ster_at + init_atom_count, 0)
+        # remove radicals:
         for atom in final_mol.GetAtoms():
             if atom.GetNumRadicalElectrons() == 1:
                 atom.SetNumRadicalElectrons(0)
@@ -171,43 +209,51 @@ class Complex:
         return
 
     def gen_final_mol_F(self):
-        '''
+        """
         Assemble fluoride adduct from Lewis acid and fluoride.
-        '''
-        central_atom = Complex.get_central_atom(self.ca.GetAtomWithIdx(0).GetSymbol(), self.final_mol)
+        """
+        central_atom = Complex.get_central_atom(
+            self.ca.GetAtomWithIdx(0).GetSymbol(), self.final_mol
+        )
         # build fluorid adduct:
         init_atom_count = self.final_mol.GetNumAtoms()
         fluorid = Chem.MolFromSmiles("[F-]")
         final_mol_F = Chem.CombineMols(self.final_mol, fluorid)
         final_mol_F = Chem.RWMol(final_mol_F)
-        final_mol_F.AddBond(central_atom.GetIdx(), init_atom_count, order=Chem.rdchem.BondType.DATIVE) #or SINGLE
+        final_mol_F.AddBond(
+            central_atom.GetIdx(), init_atom_count, order=Chem.rdchem.BondType.DATIVE
+        )  # or SINGLE
         # move formal charge from fluor atom to central atom:
         central_atom_charge = central_atom.GetFormalCharge()
-        central_atom.SetFormalCharge(central_atom_charge-1)
+        central_atom.SetFormalCharge(central_atom_charge - 1)
         final_mol_F.GetAtomWithIdx(init_atom_count).SetFormalCharge(0)
         # Done:
         self.final_mol_F = final_mol_F
         return
 
     def gen_final_mol_dative(self):
-        '''
+        """
         Generate Lewis acid with dative central atom - donor bonds.
-        '''
+        """
         # set central atom bonds of final_mol to dative:
         final_mol_dative = Chem.Mol(self.final_mol)
-        central_atom = Complex.get_central_atom(self.ca.GetAtomWithIdx(0).GetSymbol(), final_mol_dative)
+        central_atom = Complex.get_central_atom(
+            self.ca.GetAtomWithIdx(0).GetSymbol(), final_mol_dative
+        )
         for i in central_atom.GetBonds():
             i.SetBondType(Chem.rdchem.BondType.DATIVE)
         self.final_mol_dative = final_mol_dative
         return
 
     def gen_final_mol_F_dative(self):
-        '''
+        """
         Generate fluoride adduct with dative centra atom - donor bonds.
-        '''
+        """
         # set central atom bonds of final_mol_F to dative:
         final_mol_F_dative = Chem.Mol(self.final_mol_F)
-        central_atom = Complex.get_central_atom(self.ca.GetAtomWithIdx(0).GetSymbol(), final_mol_F_dative)
+        central_atom = Complex.get_central_atom(
+            self.ca.GetAtomWithIdx(0).GetSymbol(), final_mol_F_dative
+        )
         for i in central_atom.GetBonds():
             i.SetBondType(Chem.rdchem.BondType.DATIVE)
         self.final_mol_F_dative = final_mol_F_dative
@@ -221,58 +267,71 @@ class Complex:
             if symbol == ca_symbol:
                 return atom
 
-def embed_LA(my_complex):
-    '''
+
+def embed_LA(mol_complex):
+    """
     Embed Lewis acid structure.
-    If succesfull, RDKit mol object is returned,
-    else None is returned.
-    '''
+    If successful, RDKit mol object is returned, else None is returned.
+    """
     global iter_factor
-    iterations = iter_factor*my_complex.final_mol.GetNumAtoms()
-    exit_code = Chem.AllChem.EmbedMolecule(my_complex.final_mol, maxAttempts=iterations)
+    iterations = iter_factor * mol_complex.final_mol.GetNumAtoms()
+    exit_code = Chem.AllChem.EmbedMolecule(
+        mol_complex.final_mol, maxAttempts=iterations
+    )
     # if embed failed:
     if exit_code == -1:
         print("        [auto_pams] Failed to embed lewis acid (try 1).")
         # try embed lewis acid again, but with all central atom bonds set to dative
-        my_complex.gen_final_mol_dative()
-        exit_code = Chem.AllChem.EmbedMolecule(my_complex.final_mol_dative, maxAttempts=iterations)
+        mol_complex.gen_final_mol_dative()
+        exit_code = Chem.AllChem.EmbedMolecule(
+            mol_complex.final_mol_dative, maxAttempts=iterations
+        )
         # if embed failed again:
         if exit_code == -1:
-            print(f"        [auto_pams] Failed to embed lewis acid (try 2). Central atom: {my_complex.ca_symbol} Smiles: {my_complex.ligands_smiles}")
+            print(
+                f"        [auto_pams] Failed to embed lewis acid (try 2). Central atom: {mol_complex.ca_symbol} Smiles: {mol_complex.ligands_smiles}"
+            )
             return None
         else:
-            return my_complex.final_mol_dative
+            return mol_complex.final_mol_dative
     else:
-        return my_complex.final_mol
+        return mol_complex.final_mol
 
-def embed_FA(my_complex):
-    '''
+
+def embed_FA(mol_complex):
+    """
     Embed fluoride adduct structure.
-    If succesfull, RDKit mol object is returned,
-    else None is returned.
-    '''
+    If successful, an RDKit mol object is returned, else None is returned.
+    """
     global iter_factor
-    iterations = iter_factor*my_complex.final_mol_F.GetNumAtoms()
-    exit_code = Chem.AllChem.EmbedMolecule(my_complex.final_mol_F, maxAttempts=iterations)
+    iterations = iter_factor * mol_complex.final_mol_F.GetNumAtoms()
+    exit_code = Chem.AllChem.EmbedMolecule(
+        mol_complex.final_mol_F, maxAttempts=iterations
+    )
     # if embed failed:
     if exit_code == -1:
         print("        [auto_pams] Failed to embed fluoride adduct (try 1).")
         # try embed lewis acid again, but with all central atom bonds set to dative
-        my_complex.gen_final_mol_F_dative()
-        exit_code = Chem.AllChem.EmbedMolecule(my_complex.final_mol_F_dative, maxAttempts=iterations)
+        mol_complex.gen_final_mol_F_dative()
+        exit_code = Chem.AllChem.EmbedMolecule(
+            mol_complex.final_mol_F_dative, maxAttempts=iterations
+        )
         # if embed failed again:
         if exit_code == -1:
-            print(f"        [auto_pams] Failed to embed fluoride adduct (try 2). Central atom: {my_complex.ca_symbol} Smiles: {my_complex.ligands_smiles}")
+            print(
+                f"        [auto_pams] Failed to embed fluoride adduct (try 2). Central atom: {mol_complex.ca_symbol} Smiles: {mol_complex.ligands_smiles}"
+            )
             return None
         else:
-            return my_complex.final_mol_F_dative
+            return mol_complex.final_mol_F_dative
     else:
-        return my_complex.final_mol_F
+        return mol_complex.final_mol_F
+
 
 def save_connectivity(mol, name):
     """
-    Store the connectivitie of a complex as a dictionary with file name as key and 2D numpy array as value.
-    
+    Store the connectivity of a complex (molecule) as a dictionary with file name as key and 2D numpy array as value.
+
     Parameters
     ----------
     mol: (Chem.rdchem.Mol)
@@ -283,12 +342,15 @@ def save_connectivity(mol, name):
     connectivities = np.empty(shape=(0, 2), dtype=np.int32)
     for bonds in mol.GetBonds():
         bond = np.array(
-            [[bonds.GetBeginAtom().GetIdx(), bonds.GetEndAtom().GetIdx()]], dtype=np.dtype(int))
+            [[bonds.GetBeginAtom().GetIdx(), bonds.GetEndAtom().GetIdx()]],
+            dtype=np.dtype(int),
+        )
         connectivities = np.append(connectivities, bond, axis=0)
     # sorting:
     connectivities.sort(axis=1)
-    connectivities = connectivities[np.lexsort(
-        (connectivities[:, 1], connectivities[:, 0]))]
+    connectivities = connectivities[
+        np.lexsort((connectivities[:, 1], connectivities[:, 0]))
+    ]
     # saving:
     with open(connectivity_out_file, "rb") as fl:
         connectivity_file = pickle.load(fl)
@@ -299,10 +361,13 @@ def save_connectivity(mol, name):
         pickle.dump(connectivity_file, fl)
     return
 
-def structure_gen(ca: str, ligands: list, file_name: str, only_SMILES=False, only_LA=True):
+
+def structure_gen(
+    ca: str, ligands: list, file_name: str, only_SMILES=False, only_LA=True
+):
     """
     Assemble Lewis acid and fluoride adduct and embed structure.
-    
+
     Parameters
     ----------
     ca: str
@@ -312,38 +377,42 @@ def structure_gen(ca: str, ligands: list, file_name: str, only_SMILES=False, onl
     name: str
         The unique name of the complex.
     only_SMILES: bool, optional
-        If the only_SMILES is set Flase, structures are not embedded (default True).
+        If the only_SMILES is set False, structures are not embedded (default True).
     only_LA: bool, optional
-        If the only_LA is set to True, fluoride adducts are generated additionaly (default False).
+        If the only_LA is set to True, fluoride adducts are generated additionally (default False).
 
     Returns:
     --------
     (smiles_LA, smiles_FA): tuple of str
         Tuple of SMILES strings.
     """
-    my_complex = Complex(ca, ligands, file_name)
-    my_complex.gen_final_mol()
-    smiles_LA = Chem.MolToSmiles(my_complex.final_mol)
+    mol_complex = Complex(ca, ligands, file_name)
+    mol_complex.gen_final_mol()
+    smiles_LA = Chem.MolToSmiles(mol_complex.final_mol)
     if only_LA:
         smiles_FA = "Was not generated."
     else:
-        my_complex.gen_final_mol_F()
-        smiles_FA = Chem.MolToSmiles(my_complex.final_mol_F)
+        mol_complex.gen_final_mol_F()
+        smiles_FA = Chem.MolToSmiles(mol_complex.final_mol_F)
     # try embed lewis acid:
     if not only_SMILES:
-        mol_LA = embed_LA(my_complex)
+        mol_LA = embed_LA(mol_complex)
         if mol_LA is None:
             return None, None
     # try embed fluoride adduct:
     if not only_SMILES and not only_LA:
-        mol_FA = embed_FA(my_complex)
+        mol_FA = embed_FA(mol_complex)
         if mol_FA is None:
             return None, None
-    #Save xyz files and connectivity:
+    # Save xyz files and connectivity:
     if not only_SMILES:
-        Chem.rdmolfiles.MolToXYZFile(mol_LA, os.path.join(xyz_out_dir, f"{file_name}.xyz"), 0)
+        Chem.rdmolfiles.MolToXYZFile(
+            mol_LA, os.path.join(xyz_out_dir, f"{file_name}.xyz"), 0
+        )
         save_connectivity(mol_LA, file_name)
         if not only_LA:
-            Chem.rdmolfiles.MolToXYZFile(mol_FA, os.path.join(xyz_out_dir, f"{file_name}__F.xyz"), 0)
+            Chem.rdmolfiles.MolToXYZFile(
+                mol_FA, os.path.join(xyz_out_dir, f"{file_name}__F.xyz"), 0
+            )
             save_connectivity(mol_FA, f"{file_name}__F")
     return smiles_LA, smiles_FA

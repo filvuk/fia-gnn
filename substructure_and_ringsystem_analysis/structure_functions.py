@@ -65,10 +65,10 @@ def getRingSystemSmiles(mol, includeTerminalAtoms=True):
                     )
                     is_donor = (
                         neighbor.GetNumRadicalElectrons() == 1
-                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    )  # optional check, explicitly for this use case: donor atoms are never terminal
                     is_terminal = (
                         is_terminal and not is_donor
-                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    )  # optional check, explicitly for this use case: donor atoms are never terminal
                 else:
                     is_terminal = False
 
@@ -103,7 +103,7 @@ def getRingSystemSmiles(mol, includeTerminalAtoms=True):
         ### 2. read in smarts as smiles
         ### 3. generate smiles
         ### but why?!?
-        ###   Reason: smarts are not canonical, e.g. diffrent smarts for equal ring systems can be generated
+        ###   Reason: smarts are not canonical, e.g. different smarts for equal ring systems can be generated
         ###   but why don't generate smiles in the first place?!?
         ###       Reason: directly generated smiles are broken
         smarts = Chem.MolToSmarts(submol)
@@ -125,11 +125,11 @@ def getSubSmilesRadN(
 
     If centrum of substructure is a ring atom, substructure is skipped by default.
     If a substructure is a subset of another substructure, substructure is skipped by default.
-    Terminal atoms (-F, -Cl, =O, ...) are not converted to wildcardatoms by default.
+    Terminal atoms (-F, -Cl, =O, ...) are not converted to wildcard atoms by default.
 
-    Be careful with molecules with polycylic aromatic ring systems:
-    Substructures of polycylic aromatic ring systems can't be represented
-    as rdkit smiles consistently (aromatizity is not represented consistently).
+    Be careful with molecules with polycyclic aromatic ring systems:
+    Substructures of polycyclic aromatic ring systems can't be represented
+    as rdkit smiles consistently (aromaticity is not represented consistently).
     Keep radius small to avoid substructures that contain closed ring of aromatic ring system.
     """
     # some lists for later:
@@ -193,17 +193,17 @@ def getSubSmilesRadN(
                     )
                     is_donor = (
                         neighbor.GetNumRadicalElectrons() == 1
-                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    )  # optional check, explicitly for this use case: donor atoms are never terminal
                     is_terminal = (
                         is_terminal and not is_donor
-                    )  # optional check, explicitly for this usecase: donor atoms are never terminal
+                    )  # optional check, explicitly for this use case: donor atoms are never terminal
                 else:
                     is_terminal = False
 
                 if n_idx not in atomEnv and not is_H and not is_terminal:
                     wildcardAtoms.add(n_idx)
 
-        # generate enlargedAtomEnv and check if current enlargedAtomEnv is a dublicate:
+        # generate enlargedAtomEnv and check if current enlargedAtomEnv is a duplicate:
         enlargedAtomEnv = atomEnv.copy()
         for bond_idx in enlargedEnv:
             enlargedAtomEnv.add(mol.GetBondWithIdx(bond_idx).GetBeginAtomIdx())
@@ -247,7 +247,7 @@ def getSubSmilesRadN(
             # because information about element type is still necessary to kekulize the submol smarts
             if atom.GetIsAromatic() and atom.IsInRing():
                 atom.SetAtomMapNum(1000)
-            # else the wildcardatom is directly marked as wildcard atom, as information about element type is not needed:
+            # else the wildcard atom is directly marked as wildcard atom, as information about element type is not needed:
             else:
                 atom.SetAtomicNum(0)
 
@@ -272,7 +272,7 @@ def getSubSmilesRadN(
         ### 2. read in smarts as smiles
         ### 3. generate smiles
         ### but why?!?
-        ###   Reason: smarts are not canonical, e.g. diffrent smarts for equal submols can be generated
+        ###   Reason: smarts are not canonical, e.g. different smarts for equal submols can be generated
         ###   but why don't generate smiles in the first place?!?
         ###       Reason: directly generated smiles are broken
         smarts = Chem.MolToSmarts(submol)
