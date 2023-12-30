@@ -4,7 +4,7 @@ import xyz2graph
 
 class ValenceAngle:
     """
-    A class that can be used to geometrially analyze bond angles around a given atom.
+    A class that can be used to geometrically analyze bond angles around a given atom.
     ...
     Parameters
     ----------
