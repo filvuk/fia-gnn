@@ -6,7 +6,7 @@ The FIA49k dataset and all other data files can be downloaded from the correspon
 
 ## Use FIA-GNN via the Web App
 
-The FIA-GNN models can be used free of charge at [link](https://github.com/).  
+The FIA-GNN models can be used free of charge at [this homepage](https://www.grebgroup.de/fia/).  
 
 ## Use FIA-GNN within a Jupyter Notebook
 
