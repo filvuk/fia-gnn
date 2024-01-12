@@ -16,7 +16,7 @@ The ```deploy_fia_gnn.ipynb``` notebook demonstrates how to use the trained mode
 
 If model training is intended, run the ```run_preprocessing.py``` script. This will create the preprocessed graph inputs.
 
-```python
+```bash
 python run_preprocessing.py 
 ```
 
@@ -24,13 +24,13 @@ Preprocessing of the data is done simultaneously for FIA<sub>gas</sub> and FIA<s
   
 Next, the model can be trained with the ```train_fia_gnn.py``` script. Training is either done for FIA<sub>gas</sub> or FIA<sub>solv</sub>.
 
-```python
+```bash
 python train_fia_gnn.py 
 ```
   
 A respective conda environment for training can be obtained with
 
-```
+```bash
 cd fia_gnn/
 conda env create -f tf2_gpu_fia_gnn.yml -n fia_gnn_tf_env
 conda activate fia_gnn_tf_env
