@@ -44,7 +44,7 @@ class ValenceAngle:
 
         self.neighbors_indices = []
         for pair in graph.adj_list:
-            # The central atom has atom idx 0 and it always comes first
+            # The central atom has atom idx 0, and it always comes first
             if pair[0] == 0:
                 self.neighbors_indices.append(pair[1])
             else:
