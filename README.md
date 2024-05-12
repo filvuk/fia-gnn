@@ -1,7 +1,7 @@
 # Predicting Lewis Acidity: Machine Learning the Fluoride Ion Affinity of _p_-Block Atom-based Molecules
 
 This repository corresponds to the publication  
-L. M. Sigmund, S. Sowndarya S. V., A. Albers, P. Erdmann, R. S. Paton, L. Greb, _Angew. Chem. Int. Ed._ **2024**, _accepted article_, [DOI: 10.1002/anie.202401084](https://doi.org/10.1002/anie.202401084).  
+L. M. Sigmund, S. Sowndarya S. V., A. Albers, P. Erdmann, R. S. Paton, L. Greb, _Angew. Chem. Int. Ed._ **2024**, _63_, e202401084 [DOI: 10.1002/anie.202401084](https://doi.org/10.1002/anie.202401084).  
 The FIA49k dataset and all other data files can be downloaded from the corresponding [figshare project](https://figshare.com/projects/FIA-GNN/187050) and should be placed in the "data" folder of this repository to run the provided Jupyter notebooks and Python scripts.  
 
 ## Use FIA-GNN via the Web App
