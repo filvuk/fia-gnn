@@ -3,6 +3,7 @@
 **/__pycache__/
 
 # Files available from figshare
+data/*
 data/FIA49k.csv.gz
 data/FIA49k.zip
 data/FIA49k_2d_descriptors.csv.gz
