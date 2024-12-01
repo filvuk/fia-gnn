@@ -139,12 +139,31 @@ def getSubSmilesRadN(
     wildcards = []
     ring_atom_count = 0
 
+    # replace radical electrons with dummy neighbours since no radicals are present in the database
+    # and rdkit needs neighbours for aromaticity calculation, otherwise radical atoms that would otherwise be aromatic
+    # are not, which leads to errors in substructure search
+    for atom in mol.GetAtoms():
+        if atom.GetNumRadicalElectrons() == 1:  
+            mol.GetAtomWithIdx(atom.GetIdx()).SetNumRadicalElectrons(0)
+            edit = Chem.EditableMol(mol)
+            new_atom = Chem.Atom(0)
+            ca_index_sub = edit.AddAtom(new_atom)
+            edit.AddBond(atom.GetIdx(), ca_index_sub, Chem.rdchem.BondType.SINGLE)
+            mol = edit.GetMol()
+    # reparse mol
+    mol = Chem.MolFromSmiles(Chem.MolToSmiles(mol))
+
+    
     # STEP 1: generate all envs, atomEnvs and wildcards of all substructure:
     # loop all atoms of mol:
     for atom in mol.GetAtoms():
         # skip central atoms in rings:
         if skipRings and atom.IsInRing():
             ring_atom_count += 1
+            continue
+
+        # skip dummy atoms
+        if atom.GetAtomicNum() == 0:
             continue
 
         ### RDKit shenanigans part 0:
@@ -235,6 +254,7 @@ def getSubSmilesRadN(
         wildcards = [x for i, x in enumerate(wildcards) if i not in subSets]
 
     # STEP 3: generate submols and convert them to smiles:
+    
     for enlargedEnv, wildcardAtoms in zip(envs, wildcards):
         # generate submol
         atom_map = {}
@@ -261,7 +281,7 @@ def getSubSmilesRadN(
             mol_atom = mol.GetAtomWithIdx(mol_atom_idx)
             submol_atom = submol.GetAtomWithIdx(submol_atom_idx)
             if (
-                not mol_atom_idx in wildcardAtoms
+                not mol_atom_idx in wildcardAtoms 
             ):  # or submol_atom.GetAtomMapNum() == 1000:
                 submol_atom.SetNumExplicitHs(mol_atom.GetTotalNumHs())
             else:
